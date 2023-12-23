@@ -1,4 +1,8 @@
+<<<<<<< HEAD:organize/src/firebase.js
 import { initializeApp } from 'firebase/app';
+=======
+import firebase from 'firebase/app';
+>>>>>>> fb73d72114bde23bff100a628e691ff3feefdad0:src/firebase.js
 import 'firebase/auth';
 import 'firebase/firestore';
 
