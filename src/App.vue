@@ -1,13 +1,13 @@
-<script>
-  import LoginImage from "./components/LoginImage.vue"
+<script setup>
+  import LoginImage from './components/LoginImage.vue';
 </script>
 
 
 <template>
-  <v-app>
+  <VApp>
     <LoginImage/>
-    <v-main></v-main>
-  </v-app> 
+    <VMain></VMain>
+  </VApp> 
 </template>
 
  
