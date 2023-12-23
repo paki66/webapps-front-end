@@ -1,18 +1,13 @@
+<script>
+  import LoginImage from "./components/LoginImage.vue"
+</script>
+
+
 <template>
   <v-app>
-    <v-main>
-      <router-view/>
-    </v-main>
-  </v-app>
+    <LoginImage/>
+    <v-main></v-main>
+  </v-app> 
 </template>
 
-<script>
-
-export default {
-  name: 'App',
-
-  data: () => ({
-    //
-  }),
-}
-</script>
+ 
