@@ -1,5 +1,11 @@
 <template>
-  <div class="about">
+  <v-app class="about">
+    <v-img
+  :width="300"
+  aspect-ratio="16/9"
+  cover
+  src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+  ></v-img>
     <h1>This is an login page</h1>
     <div class="container">
       <div class="row">
@@ -21,7 +27,7 @@
         <div class="col-sm"></div>
       </div>
     </div>
-  </div>
+  </v-app>
 </template>
 
 <script>
