@@ -1,9 +1,9 @@
 <template>
     <v-text-field
           v-model="password"
-          label="Password"
           type="password"
-          outlined
+          outline-color="black"
+          variant="outlined"
           required
         ></v-text-field>
 </template>

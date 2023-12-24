@@ -2,6 +2,7 @@
   import LoginImage from './components/LoginImage.vue';
   import EmailInput from './components/Emailnput.vue';
   import PasswordInput from './components/PasswordInput.vue';
+  import MainButton from './components/MainButton.vue';
 </script>
 
 
@@ -21,7 +22,20 @@
                 <br>
                 <br>
                 <EmailInput/>
-                <PasswordInput/>
+                <PasswordInput label="password"/>
+                <PasswordInput label="repeat password"/>
+                <MainButton style="display: flex; justify-content: center; width: 400px;">
+                  Continue
+                </MainButton>
+                <br>
+                <br>
+                <v-row class="mt-auto, justify-center" >
+                  <p :style="{'font-size': '20px'}">Already have an account?</p>
+                  <v-btn inline variant="text"
+                  style="color:blue; padding-top: 0px;" >
+                    Login
+                  </v-btn>
+                </v-row>
               </div> 
             </v-col>
             <v-col cols="12" md="6">

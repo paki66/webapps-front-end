@@ -3,7 +3,9 @@
           v-model="email"
           label="Email"
           type="email"
-          outlined
+          placeholder="name.example@gmail.com"
+          outline-color="black"
+          variant="outlined"
           required
         ></v-text-field>
 </template>
