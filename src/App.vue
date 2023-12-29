@@ -1,3 +1,11 @@
+<script setup>
+  import LoginImage from './components/LoginImage.vue';
+  import EmailInput from './components/Emailnput.vue';
+  import PasswordInput from './components/PasswordInput.vue';
+  import MainButton from './components/MainButton.vue';
+</script>
+
+
 <template>
   <v-app>
     <v-main>
