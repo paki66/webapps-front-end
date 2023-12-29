@@ -1,6 +1,8 @@
 <template>
     <v-text-field
           v-model="email"
+          :readonly="loading"
+          :rules="[required, validEmail]"
           label="Email"
           type="email"
           placeholder="name.example@gmail.com"

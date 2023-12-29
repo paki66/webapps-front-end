@@ -1,3 +1,9 @@
+<script setup>
+  import EmailInput from '../components/Emailnput.vue';
+  import PasswordInput from '../components/PasswordInput.vue';
+  import MainButton from '../components/MainButton.vue';
+</script>
+
 <template>
   <v-container fluid fill-height>
     <v-row no-gutters>
@@ -26,56 +32,16 @@
                 @submit.prevent="onSubmit"
                 validate-on="blur"
               >
-                <v-text-field
-                  v-model="email"
-                  :readonly="loading"
-                  :rules="[required, validEmail]"
-                  class="mb-4"
-                  clearable
-                  label="Email"
-                  type="email"
-                  placeholder="Enter your email"
-                  outline-color="black"
-                  variant="outlined"
-                ></v-text-field>
+              
+              <EmailInput></EmailInput>
+              <PasswordInput label="Password" placeholder="Enter your password"/>
+              <PasswordInput label="Repeat password" placeholder="Repeat your password"/>
 
-                <v-text-field
-                  v-model="password"
-                  :readonly="loading"
-                  :rules="[required, minLength]"
-                  class="mb-4"
-                  clearable
-                  label="Password"
-                  placeholder="Enter your password"
-                  outline-color="black"
-                  variant="outlined"
-                  type="password"
-                ></v-text-field>
-
-                <v-text-field
-                  v-model="repeatPassword"
-                  :readonly="loading"
-                  :rules="[required, checkPassword]"
-                  clearable
-                  label="Repeated password"
-                  placeholder="Repeat your password"
-                  outline-color="black"
-                  variant="outlined"
-                  type="password"
-                ></v-text-field>
                 <br />
 
-                <v-btn
-                  :disabled="!form"
-                  :loading="loading"
-                  block
-                  color="black"
-                  size="large"
-                  type="submit"
-                  variant="elevated"
-                >
-                  Sign In
-                </v-btn>
+                <MainButton style="display: flex; justify-content: center; width: 400px;">
+                  Sign in
+                </MainButton>
 
                 <v-row justify="center">
                   <p class="mt-10 mb-2">

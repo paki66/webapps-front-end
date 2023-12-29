@@ -1,6 +1,9 @@
 <template>
     <v-text-field
           v-model="password"
+          :readonly="loading"
+          :rules="[required, checkPassword]"
+          clearable
           type="password"
           outline-color="black"
           variant="outlined"
