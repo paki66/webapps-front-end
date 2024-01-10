@@ -1,7 +1,10 @@
 <template>
-  <v-container>
-    <v-row class="d-flex justify-center align-center">
-      <v-col cols="12" class="text-center">
+  <v-container fluid class="mx-0 pa-0">
+    <v-row
+      class="d-flex justify-center align-center pt-4"
+      style="background-color: #e5dfff"
+    >
+      <v-col cols="12" class="text-center pb-0">
         <v-avatar size="100">
           <img
             :src="store.user.photo"
@@ -10,15 +13,19 @@
           />
         </v-avatar>
         <h3>{{ userName }}</h3>
-        <p>{{ userRole }}</p>
+        <p class="mb-0">{{ userRole }}</p>
       </v-col>
+
+      <v-tabs
+        v-model="tab"
+        color="deep-purple-accent-4"
+        align-tabs="center"
+        style="background-color: #e5dfff"
+      >
+        <v-tab :value="1">Personal info</v-tab>
+        <v-tab :value="2">Change password</v-tab>
+      </v-tabs>
     </v-row>
-
-    <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
-      <v-tab :value="1">Personal info</v-tab>
-      <v-tab :value="2">Change password</v-tab>
-    </v-tabs>
-
     <v-window v-model="tab" class="pt-8">
       <v-window-item v-show="tab === 1" :key="1" :value="1">
         <v-container fluid class="pt-0">
