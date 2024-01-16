@@ -27,6 +27,31 @@
                 validate-on="blur"
               >
                 <v-text-field
+                  v-model="name"
+                  :readonly="loading"
+                  :rules="[required]"
+                  class="mb-4"
+                  clearable
+                  label="Name"
+                  type="text"
+                  placeholder="Enter your name"
+                  outline-color="black"
+                  variant="outlined"
+                ></v-text-field>
+
+                <v-text-field
+                  v-model="surname"
+                  :readonly="loading"
+                  :rules="[required]"
+                  class="mb-4"
+                  clearable
+                  label="Surname"
+                  type="text"
+                  placeholder="Enter your surname"
+                  outline-color="black"
+                  variant="outlined"
+                ></v-text-field>
+                <v-text-field
                   v-model="email"
                   :readonly="loading"
                   :rules="[required, validEmail]"
@@ -99,7 +124,7 @@
       <v-col cols="12" md="6" class="d-flex align-center justify-center">
         <v-img
           src="https://aimlief.com/wp-content/uploads/2019/11/featured-tiny-png-101.png"
-          height="95vh"
+          height="100%"
           width="100%"
           cover
         ></v-img>
@@ -113,6 +138,8 @@ export default {
   name: "SignupVue",
   data: () => ({
     form: false,
+    name: null,
+    surname: null,
     email: null,
     password: null,
     repeatPassword: null,
