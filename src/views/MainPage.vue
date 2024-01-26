@@ -31,10 +31,15 @@
     </v-col>
 
     <v-col cols="2">
-      <main-button size="large" block> 
+      <main-button 
+      @click="openPopUp"
+      size="large" 
+      block
+      >
         New project 
       <v-icon icon="mdi-plus">
         </v-icon> 
+        
       </main-button>
     </v-col>
 
@@ -101,7 +106,7 @@
   <v-row>
     <v-col cols="1">
     </v-col>
-    
+
     <v-col cols="2">
       <v-btn 
       append-icon="mdi-plus"
@@ -118,8 +123,10 @@
 <script>
 import MainButton from '@/components/MainButton.vue';
 import Month from '@/components/Month.vue';
+import NewProjectPopUp from '@/components/NewProjectPopUp.vue';
 
-osobe: [
+osobe:
+  [
   {
     "id": "1",
     "name": "mihaela soldat"
@@ -177,33 +184,16 @@ projekti: [
 
 
 export default {
-  components: { MainButton, Month},
+  components: { MainButton, Month, NewProjectPopUp},
   name: "MainPage",
   data () {
     return {
-      select: { title: 'Fipugram',
-                months: [
-                  {name: 'January', year: '2024'},
-                  {name: 'February', year: '2024'},
-                  {name: 'March', year:'2024'},
-                ] 
-              },
+      popupDialog: false,
+      select: { title: 'Fipugram',},
       projekti: [
-        { title: 'Fipugram',
-          months: [
-                  {name: 'January', year: '2024'},
-                  {name: 'February', year: '2024'},
-                  {name: 'March', year:'2024'},
-                ] },
-        { title: 'Rukovnik',
-          months: [
-                  {name: 'January', year: '2024'},
-                  {name: 'February', year: '2024'},
-                ] },
-        { title: 'ORGanize',
-          months: [
-                  {name: 'January', year: '2024'},
-                ] },
+        { title: 'Fipugram',},
+        { title: 'Rukovnik',},
+        { title: 'ORGanize',},
       ],
     }
   },
@@ -211,6 +201,9 @@ export default {
     handleDropdownChange() {
       
       console.log(`Selected option: ${this.selectedOption}`);
+    },
+    openPopUp() {
+      this.popupDialog = true;
     },
   },
 };
