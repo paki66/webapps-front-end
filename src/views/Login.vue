@@ -63,6 +63,7 @@
                   size="large"
                   type="submit"
                   variant="elevated"
+                  @click="$router.push('/mainpage')"
                 >
                   Log In
                 </v-btn>
