@@ -20,6 +20,7 @@
         persistent-hint
         return-object
         single-line
+        @input="handleDropdownChange"
       ></v-select>
 
     </v-col>
@@ -81,10 +82,34 @@
     </v-col>
   </v-row>
 
-  <v-row>  
-    <div>
-      {{ select.months }}
-    </div>
+  
+ 
+  <v-row>
+    <v-col cols="1">
+    </v-col>
+    <v-col cols="10">
+      <month>
+      </month>
+      <month>
+      </month>
+    </v-col>
+  </v-row>
+
+
+  <br>
+
+  <v-row>
+    <v-col cols="1">
+    </v-col>
+    
+    <v-col cols="2">
+      <v-btn 
+      append-icon="mdi-plus"
+      size="x-large"
+      >
+        Add month
+      </v-btn>
+    </v-col>
   </v-row>
 
 </template>
@@ -92,8 +117,67 @@
 
 <script>
 import MainButton from '@/components/MainButton.vue';
+import Month from '@/components/Month.vue';
+
+osobe: [
+  {
+    "id": "1",
+    "name": "mihaela soldat"
+  },
+  {
+    "id": "2",
+    "name": "paolo bursic"
+  },
+  {
+    "id": "3",
+    "name": "John Doe"
+  }
+]
+task: [
+  {
+    "id": "1",
+    "month_year": "02-2024",
+    "person": "1",
+    "project": "1",
+  },
+  {
+    "id": "2",
+    "month_year": "01-2024",
+    "person": "1",
+    "project": "1",
+  },
+  {
+    "id": "3",
+    "month_year": "02-2024",
+    "person": "2",
+    "project": "1",
+  },
+  {
+    "id": "4",
+    "month_year": "02-2024",
+    "person": "2",
+    "project": "2",
+  }
+]
+
+projekti: [
+  {
+    "id": "1",
+    "title": "Fipugram",
+  },
+  {    
+    "id": "2",
+    "title": "rukovnik",
+  },
+  {
+    "id": "3",
+    "title": "ORGanize",
+  }
+]
+
+
 export default {
-  components: { MainButton },
+  components: { MainButton, Month},
   name: "MainPage",
   data () {
     return {
@@ -122,6 +206,12 @@ export default {
                 ] },
       ],
     }
+  },
+  methods: {
+    handleDropdownChange() {
+      
+      console.log(`Selected option: ${this.selectedOption}`);
+    },
   },
 };
 </script>
