@@ -1,89 +1,68 @@
 <template>
-  <v-row justify="center">
-    <v-dialog v-model="dialog" persistent width="1024">
-      <v-btn color="primary" v-bind="props"> Open Dialog </v-btn>
-
-      <v-card>
-        <v-card-title>
-          <span class="text-h5">User Profile</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field label="Legal first name*" required></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field
-                  label="Legal middle name"
-                  hint="example of helper text only on focus"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field
-                  label="Legal last name*"
-                  hint="example of persistent helper text"
-                  persistent-hint
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field label="Email*" required></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  label="Password*"
-                  type="password"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-select
-                  :items="['0-17', '18-29', '30-54', '54+']"
-                  label="Age*"
-                  required
-                ></v-select>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-autocomplete
-                  :items="[
-                    'Skiing',
-                    'Ice hockey',
-                    'Soccer',
-                    'Basketball',
-                    'Hockey',
-                    'Reading',
-                    'Writing',
-                    'Coding',
-                    'Basejump',
-                  ]"
-                  label="Interests"
-                  multiple
-                ></v-autocomplete>
-              </v-col>
-            </v-row>
-          </v-container>
-          <small>*indicates required field</small>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+  <form @submit.prevent="onSubmit">
+    <v-row justify="center">
+      <v-dialog v-model="dialog" persistent width="20%">
+        <v-card>
+          <v-card-title>
+            <span class="text-h5">What's your status?</span>
+          </v-card-title>
+          <v-list>
+            <v-radio-group v-model="radios">
+              <v-list-item v-for="(item, index) in status" :key="index">
+                <v-list-item-content>
+                  <v-radio :value="index"
+                    ><template v-slot:label>
+                      <div class="custom-radio-label">
+                        {{ item.status }}
+                        <v-icon class="ml-1" :color="item.color" size="small">{{
+                          item.icon
+                        }}</v-icon>
+                      </div>
+                    </template></v-radio
+                  >
+                </v-list-item-content>
+              </v-list-item>
+            </v-radio-group>
+          </v-list>
+          <v-btn color="blue-darken-1" variant="text" @click="closeDialog">
             Close
           </v-btn>
-          <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+          <v-btn color="blue-darken-1" variant="text" @click="onSubmit">
             Save
           </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
+        </v-card>
+      </v-dialog>
+    </v-row>
+  </form>
 </template>
 
 <script>
+import store from "../store.js";
 export default {
   name: "WorkingStatus",
   data: () => ({
     dialog: true,
+    loading: false,
+    radios: 0,
+    status: store.userStatus,
   }),
+  methods: {
+    closeDialog() {
+      this.dialog = false;
+      this.$emit("close");
+    },
+    onSubmit() {
+      this.loading = true;
+      store.user.status = this.radios;
+
+      this.closeDialog();
+    },
+  },
 };
 </script>
+<style scoped>
+.custom-radio-label {
+  display: flex;
+  align-items: center;
+}
+</style>
