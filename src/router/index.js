@@ -3,6 +3,7 @@ import Homepage from "../views/Homepage.vue";
 import Login from "../views/Login.vue";
 import Signup from "../views/Signup.vue";
 import MyAccount from "../views/MyAccount.vue";
+import MainPage from "../views/MainPage.vue";
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
     name: "myaccount",
     component: MyAccount,
   },
+  {
+    path: "/mainpage",
+    name: "mainpage",
+    component: MainPage,
+  }
 ];
 
 const router = createRouter({
