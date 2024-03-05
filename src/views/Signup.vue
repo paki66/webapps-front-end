@@ -98,7 +98,7 @@
                   size="large"
                   type="submit"
                   variant="elevated"
-                  @click="$router.push('/mainpage')"
+                  @click="signUp()"
                 >
                   Sign In
                 </v-btn>
@@ -135,6 +135,7 @@
 </template>
 
 <script>
+import AuthService from "@/services/AuthService";
 export default {
   name: "SignupVue",
   data: () => ({
@@ -172,6 +173,21 @@ export default {
       if (v == this.password) return true;
 
       return "Your password doesn't match.";
+    },
+    async signUp() {
+      try {
+        let user = {
+          name: this.name,
+          surname: this.surname,
+          email: this.email,
+          password: this.password,
+          repeatPassword: this.repeatPassword,
+        };
+        let result = await AuthService.signup(user);
+        this.$router.push("/mainpage");
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
