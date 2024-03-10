@@ -63,7 +63,7 @@
                   size="large"
                   type="submit"
                   variant="elevated"
-                  @click="$router.push('/mainpage')"
+                  @click="login()"
                 >
                   Log In
                 </v-btn>
@@ -100,6 +100,7 @@
 </template>
 
 <script>
+import AuthService from "@/services/AuthService";
 export default {
   name: "LoginVue",
   data: () => ({
@@ -119,6 +120,18 @@ export default {
     },
     required(v) {
       return !!v || "Field is required";
+    },
+    async login() {
+      try {
+        let userData = {
+          email: this.email,
+          password: this.password,
+        };
+        let result = await AuthService.login(userData);
+        this.$router.push("/mainpage");
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
