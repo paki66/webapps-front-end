@@ -7,11 +7,33 @@ function signup(user) {
   });
 }
 function login(loginData) {
-  axios.post(dataServiceBaseUrl + "/login", loginData).then((response) => {
-    response.data;
-  });
+  return axios
+    .post(dataServiceBaseUrl + "/login", loginData)
+    .then((response) => {
+      if (response.status === 200) {
+        localStorage.setItem("user", JSON.stringify(response.data));
+        return response.data;
+      } else {
+        throw new Error(response.data.message);
+      }
+    })
+    .catch((error) => {
+      alert(
+        `Error: ${error.response ? error.response.data.message : error.message}`
+      );
+      return Promise.reject(error);
+    });
+}
+function logout() {
+  localStorage.removeItem("user");
+}
+
+function getUser() {
+  return JSON.parse(localStorage.getItem("user"));
 }
 export default {
   signup,
   login,
+  logout,
+  getUser,
 };
