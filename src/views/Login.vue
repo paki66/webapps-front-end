@@ -128,7 +128,7 @@ export default {
           password: this.password,
         };
         let result = await AuthService.login(userData);
-        console.log(result); // Add this line
+        console.log(result);
         console.log(localStorage.getItem("user"));
         let user = AuthService.getUser();
         console.log(user);

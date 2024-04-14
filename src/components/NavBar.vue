@@ -44,13 +44,13 @@
           </v-btn>
         </template>
         <v-list>
-            <v-list-item :to="{ path: '/mainpage' }">
+          <v-list-item :to="{ path: '/mainpage' }">
             <v-list-item-title>Mainpage</v-list-item-title>
           </v-list-item>
           <v-list-item :to="{ path: '/myaccount' }">
             <v-list-item-title>My profile</v-list-item-title>
           </v-list-item>
-          <v-list-item :to="{ path: '/' }">
+          <v-list-item @click="logout" :to="{ path: '/' }">
             <v-list-item-title>Log out</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -62,6 +62,7 @@
 <script>
 import WorkingStatusPopUp from "./WorkingStatusPopUp.vue";
 import store from "../store";
+import AuthService from "@/services/AuthService";
 export default {
   components: { WorkingStatusPopUp },
   name: "NavBar",
@@ -72,6 +73,11 @@ export default {
   computed: {
     statusIndex() {
       return store.user.status;
+    },
+  },
+  methods: {
+    logout() {
+      AuthService.logout();
     },
   },
 };

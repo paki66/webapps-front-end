@@ -11,8 +11,7 @@ function login(loginData) {
     .post(dataServiceBaseUrl + "/login", loginData)
     .then((response) => {
       if (response.status === 200) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-        return response.data;
+        setUser(response);
       } else {
         throw new Error(response.data.message);
       }
@@ -23,6 +22,10 @@ function login(loginData) {
       );
       return Promise.reject(error);
     });
+}
+function setUser(res) {
+  localStorage.setItem("user", JSON.stringify(res.data));
+  return res.data;
 }
 function logout() {
   localStorage.removeItem("user");
@@ -36,4 +39,5 @@ export default {
   login,
   logout,
   getUser,
+  setUser,
 };
