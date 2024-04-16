@@ -88,6 +88,12 @@
                   variant="outlined"
                   type="password"
                 ></v-text-field>
+                <v-select
+                  v-model="role"
+                  :rules="[required]"
+                  label="Choose your role"
+                  :items="['Manager', 'Employee']"
+                ></v-select>
                 <br />
 
                 <v-btn
@@ -145,6 +151,7 @@ export default {
     email: null,
     password: null,
     repeatPassword: null,
+    role: null,
     loading: false,
   }),
 
@@ -182,6 +189,7 @@ export default {
           email: this.email,
           password: this.password,
           repeatPassword: this.repeatPassword,
+          role: this.role,
         };
         let result = await AuthService.signup(user);
         this.$router.push("/mainpage");
