@@ -11,12 +11,12 @@
 
     <v-col class="text-end px-0">
       <v-btn @click="openPopUp = true" class="text-none px-0">
-        {{ allStatuses[statusIndex].status }}
+        {{ allStatuses[userStatus].status }}
         <v-icon
           class="ml-1"
-          :color="allStatuses[statusIndex].color"
+          :color="allStatuses[userStatus].color"
           size="small"
-          >{{ allStatuses[statusIndex].icon }}</v-icon
+          >{{ allStatuses[userStatus].icon }}</v-icon
         >
         <WorkingStatusPopUp
           v-if="openPopUp"
@@ -63,21 +63,35 @@
 import WorkingStatusPopUp from "./WorkingStatusPopUp.vue";
 import store from "../store";
 import AuthService from "@/services/AuthService";
+import ProfileService from "@/services/ProfileService";
 export default {
   components: { WorkingStatusPopUp },
   name: "NavBar",
   data: () => ({
     openPopUp: false,
     allStatuses: store.userStatus,
+    get Status() {
+      return localStorage.getItem("userStatus");
+    },
+    userStatus: null,
   }),
   computed: {
     statusIndex() {
-      return store.user.status;
+      return JSON.parse(this.Status);
     },
   },
   methods: {
     logout() {
       AuthService.logout();
+    },
+    async updateId() {
+      this.userStatus = this.statusIndex;
+    },
+  },
+  watch: {
+    statusIndex: {
+      handler: "updateId",
+      immediate: true,
     },
   },
 };

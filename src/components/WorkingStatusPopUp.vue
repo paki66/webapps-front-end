@@ -38,6 +38,8 @@
 
 <script>
 import store from "../store.js";
+import AuthService from "@/services/AuthService";
+import ProfileService from "../services/ProfileService";
 export default {
   name: "WorkingStatus",
   data: () => ({
@@ -53,7 +55,11 @@ export default {
     },
     onSubmit() {
       this.loading = true;
-      store.user.status = this.radios;
+      let user = AuthService.getUser().data.user;
+      ProfileService.changeUserStatus({
+        userId: user._id,
+        statusId: this.radios,
+      });
 
       this.closeDialog();
     },
