@@ -115,7 +115,7 @@
                 <v-text-field
                   v-model="currentPassword"
                   :readonly="loading"
-                  :rules="[required, oldPassword]"
+                  :rules="[required]"
                   class="mb-4"
                   clearable
                   label="Current password"
@@ -141,7 +141,7 @@
                 <v-text-field
                   v-model="repeatPassword"
                   :readonly="loading"
-                  :rules="[required, checkPassword]"
+                  :rules="[required]"
                   clearable
                   label="Repeated password"
                   placeholder="Repeat your password"
@@ -173,6 +173,8 @@
 
 <script>
 import store from "../store";
+import AuthService from "@/services/AuthService";
+let user = JSON.parse(localStorage.getItem("user"));
 
 export default {
   name: "MyAccount",
@@ -182,7 +184,7 @@ export default {
     store,
     userName: store.user.name + " " + store.user.surname,
     userRole: store.user.role,
-    email: store.user.email,
+    email: user.data.user.email,
     phone: store.user.phone,
     userType: store.user.userType,
     role: store.user.role,
@@ -193,12 +195,20 @@ export default {
     loading: false,
   }),
   methods: {
-    onSubmit() {
+    async onSubmit() {
       if (!this.form) return;
 
       this.loading = true;
+
       store.user.email = this.email;
-      store.user.password = this.password;
+      //store.user.password = this.password;
+      try {
+        if (this.tab === 2) {
+          await this.changePassword();
+        }
+      } catch (error) {
+        console.log(error);
+      }
       setTimeout(() => (this.loading = false), 2000);
     },
 
@@ -224,6 +234,21 @@ export default {
       return "Broj telefona/mobitela mora biti ispravan.";
     },
 
+    async changePassword() {
+      const data = {
+        email: user.data.user.email,
+        currentPassword: this.currentPassword,
+        password: this.password,
+        repeatPassword: this.repeatPassword,
+      };
+      console.log(data);
+      const response = await AuthService.changePassword(data);
+      if (response.status === 200) {
+        alert("The password has successfully been changed!");
+      } else {
+        alert("An error occured. Please try again.");
+      }
+    },
     oldPassword(v) {
       if (v == store.user.password) return true;
 

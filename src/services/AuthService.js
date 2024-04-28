@@ -30,10 +30,16 @@ function setUser(res) {
 
 function logout() {
   localStorage.removeItem("user");
+  localStorage.removeItem("userStatus");
 }
 
 function getUser() {
   return JSON.parse(localStorage.getItem("user"));
+}
+function changePassword(data) {
+  return axios
+    .patch(dataServiceBaseUrl + "/changePassword", data)
+    .then((response) => response);
 }
 export default {
   signup,
@@ -41,4 +47,5 @@ export default {
   logout,
   getUser,
   setUser,
+  changePassword,
 };
