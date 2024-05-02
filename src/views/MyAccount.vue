@@ -173,25 +173,29 @@
 
 <script>
 import store from "../store";
+import AuthService from "@/services/AuthService";
 
 export default {
   name: "MyAccount",
-  data: () => ({
-    tab: null,
-    form: false,
-    store,
-    userName: store.user.name + " " + store.user.surname,
-    userRole: store.user.role,
-    email: store.user.email,
-    phone: store.user.phone,
-    userType: store.user.userType,
-    role: store.user.role,
-    anniversary: store.user.anniversary,
-    password: null,
-    repeatPassword: null,
-    currentPassword: null,
-    loading: false,
-  }),
+  data: () => {
+    let user = AuthService.getUser();
+    return {
+      tab: null,
+      form: false,
+      store,
+      userName: store.user.name + " " + store.user.surname,
+      userRole: store.user.role,
+      email: user.data.user.email,
+      phone: store.user.phone,
+      userType: store.user.userType,
+      role: store.user.role,
+      anniversary: store.user.anniversary,
+      password: null,
+      repeatPassword: null,
+      currentPassword: null,
+      loading: false,
+    };
+  },
   methods: {
     onSubmit() {
       if (!this.form) return;

@@ -152,6 +152,7 @@ export default {
     password: null,
     repeatPassword: null,
     role: null,
+    status: 0,
     loading: false,
   }),
 
@@ -190,6 +191,7 @@ export default {
           password: this.password,
           repeatPassword: this.repeatPassword,
           role: this.role,
+          status: this.status,
         };
         let result = await AuthService.signup(user);
         this.$router.push("/mainpage");

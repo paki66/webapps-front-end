@@ -29,7 +29,7 @@ function setUser(res) {
 }
 
 function logout() {
-  localStorage.removeItem("user");
+  localStorage.clear();
 }
 
 function getUser() {

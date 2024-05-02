@@ -25,7 +25,12 @@
       </v-btn>
     </v-col>
     <v-col class="text-end px-0">
-      <v-btn variant="text" color="transparent" class="px-0">
+      <v-btn
+        variant="text"
+        color="transparent"
+        class="px-0"
+        @click="$router.push({ name: 'mainpage' })"
+      >
         <v-icon
           icon="mdi-playlist-check"
           color="black"
@@ -44,9 +49,6 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item :to="{ path: '/mainpage' }">
-            <v-list-item-title>Mainpage</v-list-item-title>
-          </v-list-item>
           <v-list-item :to="{ path: '/myaccount' }">
             <v-list-item-title>My profile</v-list-item-title>
           </v-list-item>
@@ -75,6 +77,47 @@ export default {
     },
     userStatus: null,
   }),
+  beforeCreate() {
+    console.log("-- BEFORE CREATE --");
+    console.log("user status: " + this.userStatus);
+    console.log("all user statuses: " + this.allStatuses);
+  },
+  created() {
+    this.userStatus = 0;
+    console.log("-- CREATED --");
+    console.log("user status: " + this.userStatus);
+    console.log("all user statuses: " + this.allStatuses);
+  },
+  beforeMount() {
+    console.log("-- BEFORE MOUNT --");
+    console.log("user status: " + this.userStatus);
+    console.log("all user statuses: " + this.allStatuses);
+  },
+  mounted() {
+    console.log("-- MOUNTED --");
+    console.log("user status: " + this.userStatus);
+    console.log("all user statuses: " + this.allStatuses);
+  },
+  beforeUpdate() {
+    if (localStorage.getItem("userStatus")) {
+      this.userStatus = ProfileService.getUserStatus();
+    }
+  },
+  updated() {
+    console.log("-- UPDATED --");
+    if (!localStorage.getItem("userStatus")) {
+      this.userStatus = 0;
+    }
+    if (localStorage.getItem("user")) {
+      let user = AuthService.getUser().data.user;
+      ProfileService.changeUserStatus({
+        userId: user._id,
+        statusId: this.userStatus,
+      });
+    }
+    console.log("user status: " + this.userStatus);
+    console.log("all user statuses: " + this.allStatuses);
+  },
   computed: {
     statusIndex() {
       return JSON.parse(this.Status);
