@@ -36,18 +36,26 @@
                 @submit.prevent="onSubmit"
                 validate-on="blur"
               >
-                <v-text-field
-                  v-model="role"
+                <v-select
+                  v-model="userType"
                   :readonly="loading"
-                  :rules="[required, validRole]"
+                  :rules="[required]"
                   class="mb-4"
                   clearable
-                  label="Role"
-                  type="role"
-                  placeholder="Enter your role"
+                  label="Job type"
+                  placeholder="Select your job type"
+                  :items="[
+                    'Junior Developer',
+                    'Mid-Level Developer',
+                    'Senior Developer',
+                    'Project Manager',
+                    'Data Analyst',
+                    'Data Scientist',
+                  ]"
                   outline-color="black"
                   variant="outlined"
-                ></v-text-field>
+                ></v-select>
+
                 <v-text-field
                   v-model="phone"
                   :readonly="loading"
@@ -84,6 +92,7 @@
                   outline-color="black"
                   variant="outlined"
                 ></v-text-field>
+
                 <br />
 
                 <v-btn
@@ -115,7 +124,7 @@
                 <v-text-field
                   v-model="currentPassword"
                   :readonly="loading"
-                  :rules="[required, oldPassword]"
+                  :rules="[required]"
                   class="mb-4"
                   clearable
                   label="Current password"
@@ -141,7 +150,7 @@
                 <v-text-field
                   v-model="repeatPassword"
                   :readonly="loading"
-                  :rules="[required, checkPassword]"
+                  :rules="[required]"
                   clearable
                   label="Repeated password"
                   placeholder="Repeat your password"
@@ -177,19 +186,20 @@ import AuthService from "@/services/AuthService";
 
 export default {
   name: "MyAccount",
+
   data: () => {
-    let user = AuthService.getUser();
+    let user = AuthService.getUser().data.user;
     return {
       tab: null,
       form: false,
       store,
-      userName: store.user.name + " " + store.user.surname,
-      userRole: store.user.role,
-      email: user.data.user.email,
-      phone: store.user.phone,
-      userType: store.user.userType,
-      role: store.user.role,
-      anniversary: store.user.anniversary,
+      userName: user.name + " " + user.surname,
+      userRole: user.role,
+      loggedEmail: user.email,
+      email: user.email,
+      phone: user.phone,
+      userType: user.userType,
+      anniversary: user.anniversary,
       password: null,
       repeatPassword: null,
       currentPassword: null,
@@ -197,12 +207,23 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       if (!this.form) return;
 
       this.loading = true;
+
       store.user.email = this.email;
-      store.user.password = this.password;
+      //store.user.password = this.password;
+      try {
+        if (this.tab === 1) {
+          await this.updateInfo();
+        }
+        if (this.tab === 2) {
+          await this.changePassword();
+        }
+      } catch (error) {
+        console.log(error);
+      }
       setTimeout(() => (this.loading = false), 2000);
     },
 
@@ -225,13 +246,46 @@ export default {
     validPhoneNumber(v) {
       if (/^\d{10,15}$/.test(v)) return true;
 
-      return "Broj telefona/mobitela mora biti ispravan.";
+      return "Wrong phone number format.";
     },
 
+    async changePassword() {
+      const data = {
+        loggedEmail: this.loggedEmail,
+        currentPassword: this.currentPassword,
+        password: this.password,
+        repeatPassword: this.repeatPassword,
+      };
+      const response = await AuthService.changePassword(data);
+      if (response.status === 200) {
+        alert(
+          "The password has successfully been changed! Log in with your new password."
+        );
+        AuthService.logout();
+        this.$router.push({ name: "login" });
+      } else {
+        alert(response.status, "An error occured. Please try again.");
+      }
+    },
     oldPassword(v) {
       if (v == store.user.password) return true;
 
       return "Password is incorrect.";
+    },
+    async updateInfo() {
+      const data = {
+        loggedEmail: this.loggedEmail,
+        email: this.email,
+        phone: this.phone,
+        userType: this.userType,
+        anniversary: this.anniversary,
+      };
+      const response = await AuthService.updateInfo(data);
+      if (response.status === 200) {
+        alert("Your profile has been successfully updated!");
+      } else {
+        alert("An error occured. Please try again.");
+      }
     },
 
     checkPassword(v) {

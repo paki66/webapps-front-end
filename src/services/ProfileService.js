@@ -1,10 +1,16 @@
-import axios from "axios";
-const dataServiceBaseUrl = "http://localhost:3000/users";
+import service from "./Service";
 
 function changeUserStatus(data) {
-  axios.patch(dataServiceBaseUrl + "/changeStatus", data).then((response) => {
-    setUserStatus(data.statusId);
-  });
+  service
+    .patch("/changeStatus", data, {
+      headers: {
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("user")).token,
+      },
+    })
+    .then((response) => {
+      setUserStatus(data.statusId);
+    });
 }
 function setUserStatus(id) {
   localStorage.setItem("userStatus", JSON.stringify(id));

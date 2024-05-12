@@ -77,26 +77,8 @@ export default {
     },
     userStatus: null,
   }),
-  beforeCreate() {
-    console.log("-- BEFORE CREATE --");
-    console.log("user status: " + this.userStatus);
-    console.log("all user statuses: " + this.allStatuses);
-  },
   created() {
     this.userStatus = 0;
-    console.log("-- CREATED --");
-    console.log("user status: " + this.userStatus);
-    console.log("all user statuses: " + this.allStatuses);
-  },
-  beforeMount() {
-    console.log("-- BEFORE MOUNT --");
-    console.log("user status: " + this.userStatus);
-    console.log("all user statuses: " + this.allStatuses);
-  },
-  mounted() {
-    console.log("-- MOUNTED --");
-    console.log("user status: " + this.userStatus);
-    console.log("all user statuses: " + this.allStatuses);
   },
   beforeUpdate() {
     if (localStorage.getItem("userStatus")) {
@@ -104,7 +86,6 @@ export default {
     }
   },
   updated() {
-    console.log("-- UPDATED --");
     if (!localStorage.getItem("userStatus")) {
       this.userStatus = 0;
     }
@@ -115,8 +96,6 @@ export default {
         statusId: this.userStatus,
       });
     }
-    console.log("user status: " + this.userStatus);
-    console.log("all user statuses: " + this.allStatuses);
   },
   computed: {
     statusIndex() {
