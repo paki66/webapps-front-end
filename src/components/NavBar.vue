@@ -25,7 +25,12 @@
       </v-btn>
     </v-col>
     <v-col class="text-end px-0">
-      <v-btn variant="text" color="transparent" class="px-0">
+      <v-btn
+        variant="text"
+        color="transparent"
+        class="px-0"
+        @click="$router.push({ name: 'mainpage' })"
+      >
         <v-icon
           icon="mdi-playlist-check"
           color="black"
@@ -44,9 +49,6 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item :to="{ path: '/mainpage' }">
-            <v-list-item-title>Mainpage</v-list-item-title>
-          </v-list-item>
           <v-list-item :to="{ path: '/myaccount' }">
             <v-list-item-title>My profile</v-list-item-title>
           </v-list-item>
@@ -75,6 +77,26 @@ export default {
     },
     userStatus: null,
   }),
+  created() {
+    this.userStatus = 0;
+  },
+  beforeUpdate() {
+    if (localStorage.getItem("userStatus")) {
+      this.userStatus = ProfileService.getUserStatus();
+    }
+  },
+  updated() {
+    if (!localStorage.getItem("userStatus")) {
+      this.userStatus = 0;
+    }
+    if (localStorage.getItem("user")) {
+      let user = AuthService.getUser().data.user;
+      ProfileService.changeUserStatus({
+        userId: user._id,
+        statusId: this.userStatus,
+      });
+    }
+  },
   computed: {
     statusIndex() {
       return JSON.parse(this.Status);

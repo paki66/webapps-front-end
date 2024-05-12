@@ -1,14 +1,18 @@
-import axios from "axios";
-const dataServiceBaseUrl = "http://localhost:3000/users";
+import service from "./Service";
+const config = {
+  headers: {
+    Authorization: "Bearer " + JSON.parse(localStorage.getItem("user")).token,
+  },
+};
 
 function signup(user) {
-  axios.post(dataServiceBaseUrl + "/signup", user).then((response) => {
+  service.post("/signup", user).then((response) => {
     setUser(response);
   });
 }
 function login(loginData) {
-  return axios
-    .post(dataServiceBaseUrl + "/login", loginData)
+  return service
+    .post("/login", loginData)
     .then((response) => {
       if (response.status === 200) {
         setUser(response);
@@ -29,16 +33,20 @@ function setUser(res) {
 }
 
 function logout() {
-  localStorage.removeItem("user");
-  localStorage.removeItem("userStatus");
+  localStorage.clear();
 }
 
 function getUser() {
   return JSON.parse(localStorage.getItem("user"));
 }
 function changePassword(data) {
-  return axios
-    .patch(dataServiceBaseUrl + "/changePassword", data)
+  return service
+    .patch("/changePassword", data, config)
+    .then((response) => response);
+}
+function updateInfo(data) {
+  return service
+    .patch("/updateInfo", data, config)
     .then((response) => response);
 }
 export default {
@@ -48,4 +56,5 @@ export default {
   getUser,
   setUser,
   changePassword,
+  updateInfo,
 };
