@@ -1,3 +1,4 @@
+import ProfileService from "./ProfileService";
 import service from "./Service";
 
 function signup(user) {
@@ -23,43 +24,36 @@ function login(loginData) {
     });
 }
 function setUser(res) {
-  localStorage.setItem("user", JSON.stringify(res.data));
+  const user = {
+    _id: res.data.data.user._id,
+    email: res.data.data.user.email,
+    token: res.data.token,
+  };
+  localStorage.setItem("user", JSON.stringify(user));
   return res.data;
 }
 
-function logout() {
+async function logout() {
+  let email = getUser().email;
+  let status = await ProfileService.getStatus(email);
+  if (status.data != 4 && status.data != 6) {
+    await ProfileService.changeUserStatus({
+      userId: getUser()._id,
+      statusId: 2,
+    });
+  }
+
   localStorage.clear();
 }
 
 function getUser() {
   return JSON.parse(localStorage.getItem("user"));
 }
-function changePassword(data) {
-  return service
-    .patch("/changePassword", data, {
-      headers: {
-        Authorization:
-          "Bearer " + JSON.parse(localStorage.getItem("user")).token,
-      },
-    })
-    .then((response) => response);
-}
-function updateInfo(data) {
-  return service
-    .patch("/updateInfo", data, {
-      headers: {
-        Authorization:
-          "Bearer " + JSON.parse(localStorage.getItem("user")).token,
-      },
-    })
-    .then((response) => response);
-}
+
 export default {
   signup,
   login,
   logout,
   getUser,
   setUser,
-  changePassword,
-  updateInfo,
 };

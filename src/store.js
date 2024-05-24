@@ -10,7 +10,8 @@ const store = reactive({
     email: "john.doe@gmail.com",
     password: "Abc123.?!",
     anniversary: "1.1.2022",
-    photo: "https://cdn.vuetifyjs.com/images/profiles/marcus.jpg",
+    photo:
+      "https://static.vecteezy.com/system/resources/thumbnails/010/260/479/small/default-avatar-profile-icon-of-social-media-user-in-clipart-style-vector.jpg",
     status: 0,
   },
   userStatus: [

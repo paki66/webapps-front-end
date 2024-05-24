@@ -101,6 +101,7 @@
 
 <script>
 import AuthService from "@/services/AuthService";
+import ProfileService from "@/services/ProfileService";
 export default {
   name: "LoginVue",
   data: () => ({
@@ -130,6 +131,23 @@ export default {
         let result = await AuthService.login(userData);
         let user = AuthService.getUser();
         this.$router.push("/mainpage");
+        let email = AuthService.getUser().email;
+        let response = await ProfileService.getStatus(email);
+        if ([4, 6].includes(response.data)) {
+          console.log("dođe li tu?");
+          this.userStatus = response.data;
+        } else {
+          console.log("u elsu 0");
+          this.userStatus = 0;
+          ProfileService.changeUserStatus({
+            userId: AuthService.getUser()._id,
+            statusId: this.userStatus,
+          });
+        }
+        if (localStorage.getItem("user")) {
+          let email = user.email;
+          let response = await ProfileService.getStatus(email);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -137,3 +155,19 @@ export default {
   },
 };
 </script>
+
+<!--
+      let email = AuthService.getUser().email;
+      let response = await ProfileService.getStatus(email);
+      if ([4, 6].includes(response.data)) {
+        console.log("dođe li tu?");
+        this.userStatus = response.data;
+      } else {
+        console.log("u elsu 0");
+        this.userStatus = 0;
+        ProfileService.changeUserStatus({
+          userId: AuthService.getUser()._id,
+          statusId: this.userStatus,
+        });
+      }
+    }-->

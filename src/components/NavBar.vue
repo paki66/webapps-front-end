@@ -85,16 +85,14 @@ export default {
       this.userStatus = ProfileService.getUserStatus();
     }
   },
-  updated() {
+  async updated() {
     if (!localStorage.getItem("userStatus")) {
       this.userStatus = 0;
-    }
-    if (localStorage.getItem("user")) {
-      let user = AuthService.getUser().data.user;
-      ProfileService.changeUserStatus({
-        userId: user._id,
-        statusId: this.userStatus,
-      });
+      if (localStorage.getItem("user")) {
+        let email = AuthService.getUser().email;
+        let response = await ProfileService.getStatus(email);
+        this.userStatus = response.data;
+      }
     }
   },
   computed: {

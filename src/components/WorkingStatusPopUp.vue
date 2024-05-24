@@ -55,12 +55,11 @@ export default {
     },
     onSubmit() {
       this.loading = true;
-      let user = AuthService.getUser().data.user;
+      let user = AuthService.getUser();
       ProfileService.changeUserStatus({
         userId: user._id,
         statusId: this.radios,
       });
-
       this.closeDialog();
     },
   },

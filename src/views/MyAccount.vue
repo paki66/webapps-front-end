@@ -106,6 +106,44 @@
                 >
                   Save
                 </v-btn>
+
+                <br />
+
+                <v-btn
+                  :loading="loading"
+                  block
+                  color="black"
+                  size="large"
+                  @click="dialog = true"
+                  variant="elevated"
+                >
+                  Delete your ORGanize profile
+                </v-btn>
+
+                <v-dialog v-model="dialog" width="500">
+                  <v-card>
+                    <v-card-title class="headline grey lighten-2" primary-title>
+                      Delete your ORGanize profile?
+                    </v-card-title>
+
+                    <v-card-text>
+                      Are you sure you want to delete your ORGanize profile?
+                      This action cannot be undone.
+                    </v-card-text>
+
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="primary" text @click="dialog = false">
+                        Cancel
+                      </v-btn>
+                      <v-btn color="red" text @click="deleteProfile">
+                        Confirm
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
               </v-form>
             </v-col>
           </v-row>
@@ -183,29 +221,45 @@
 <script>
 import store from "../store";
 import AuthService from "@/services/AuthService";
+import ProfileService from "@/services/ProfileService";
 
 export default {
   name: "MyAccount",
 
   data: () => {
-    let user = AuthService.getUser().data.user;
+    let user = AuthService.getUser();
     return {
       tab: null,
       form: false,
+      dialog: false,
       store,
-      userName: user.name + " " + user.surname,
-      userRole: user.role,
+      userName: null,
+      userRole: null,
+      _id: user._id,
       loggedEmail: user.email,
-      email: user.email,
-      phone: user.phone,
-      userType: user.userType,
-      anniversary: user.anniversary,
+      email: null, // null
+      phone: null,
+      userType: null,
+      anniversary: null,
       password: null,
       repeatPassword: null,
       currentPassword: null,
       loading: false,
     };
   },
+
+  async beforeMount() {
+    let response = await ProfileService.getUserInfo(this.loggedEmail);
+    let results = response.data;
+
+    this.userName = results.name + " " + results.surname;
+    this.userRole = results.role;
+    this.email = results.email;
+    this.phone = results.phone;
+    this.userType = results.userType;
+    this.anniversary = results.anniversary;
+  },
+
   methods: {
     async onSubmit() {
       if (!this.form) return;
@@ -256,7 +310,7 @@ export default {
         password: this.password,
         repeatPassword: this.repeatPassword,
       };
-      const response = await AuthService.changePassword(data);
+      const response = await ProfileService.changePassword(data);
       if (response.status === 200) {
         alert(
           "The password has successfully been changed! Log in with your new password."
@@ -280,7 +334,7 @@ export default {
         userType: this.userType,
         anniversary: this.anniversary,
       };
-      const response = await AuthService.updateInfo(data);
+      const response = await ProfileService.updateInfo(data);
       if (response.status === 200) {
         alert("Your profile has been successfully updated!");
       } else {
@@ -288,6 +342,26 @@ export default {
       }
     },
 
+    async deleteProfile() {
+      try {
+        this.loading = true;
+        const response = await ProfileService.deleteProfile(this._id);
+        this.loading = false;
+        this.dialog = false;
+
+        if (response.status === 200) {
+          alert(
+            "You have successfully deleted your profile. You will be redirected to ORGanize homepage."
+          );
+        }
+        AuthService.logout();
+        this.$router.push({ name: "home" });
+      } catch (error) {
+        this.loading = false;
+        this.dialog = false;
+        console.error("Failed to delete profile: ", error);
+      }
+    },
     checkPassword(v) {
       if (v == this.password) return true;
 
