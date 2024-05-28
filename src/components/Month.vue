@@ -2,14 +2,16 @@
     
     <v-card>
         <v-card-title>
-            January
+            {{month.name}}
         </v-card-title>
-        <v-card-item>
-            nesto
-        </v-card-item>
-        <v-card-item>
-            nesto 2
-        </v-card-item>
+        <ul>
+            <task
+                  :task="task"
+                  v-for="(task, task_index) in month.tasks" 
+                  :key="task_index"
+               ></task>
+        </ul>
+            
         <v-card-actions>
             <v-btn append-icon="mdi-plus">
                 Add task
@@ -20,8 +22,9 @@
 </template>
 
 <script>
-
-export default ({
-    
-})
+import Task from "./Task.vue"
+export default {
+    props: ["month", "task"],
+    components: {Task}
+}
 </script>

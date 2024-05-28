@@ -32,7 +32,7 @@
 
     <v-col cols="2">
       <main-button 
-      @click="openPopUp"
+      @click="showPopUp = true"
       size="large" 
       block
       >
@@ -41,10 +41,12 @@
         </v-icon> 
         
       </main-button>
+      <main-pop-up :dialog="showPopUp" @update:dialog="showPopUp = $event"></main-pop-up>
     </v-col>
 
     <v-col cols="2">
-      <v-btn size="large" block> 
+      <v-btn size="large" block
+      v-model:dialog="showPopUp"> 
         <v-icon 
         icon="mdi-magnify"
         color="black"
@@ -55,10 +57,10 @@
     </v-col>
 
     <v-col cols="2">
-      <v-btn size="large" block=""> 
+      <v-btn size="large" block="" v-model:dialog="showPopUp"> 
         <v-icon 
         icon="mdi-account"
-        color="black"
+        color="black" 
         >
         </v-icon>
         Person status
@@ -66,7 +68,7 @@
     </v-col>
 
      <v-col cols="2">
-      <v-btn size="large" block=""> 
+      <v-btn size="large" block="" v-model:dialog="showPopUp"> 
         <v-icon 
         icon="mdi-filter"
         color="black"
@@ -76,7 +78,8 @@
       </v-btn>
     </v-col>
      <v-col cols="2">
-      <v-btn size="large" block=""> 
+      <v-btn size="large" block=""
+      v-model:dialog="showPopUp"> 
         <v-icon 
         icon="mdi-clock"
         color="black"
@@ -93,13 +96,17 @@
     <v-col cols="1">
     </v-col>
     <v-col cols="10">
-      <month>
-      </month>
-      <month>
-      </month>
+      <ul>
+        <month
+          :month="month"
+          v-for="(month, month_index) in months" 
+          :key="month_index">
+        
+        </month>
+      </ul>
+
     </v-col>
   </v-row>
-
 
   <br>
 
@@ -123,9 +130,11 @@
 <script>
 import MainButton from '@/components/MainButton.vue';
 import Month from '@/components/Month.vue';
-import NewProjectPopUp from '@/components/NewProjectPopUp.vue';
+import MainPopUp from '@/components/MainPopUp.vue';
 
-osobe:
+osobe
+
+:
   [
   {
     "id": "1",
@@ -184,17 +193,57 @@ projekti: [
 
 
 export default {
-  components: { MainButton, Month, NewProjectPopUp},
+  components: { MainButton, Month, MainPopUp},
   name: "MainPage",
-  data () {
+  data() {
     return {
-      popupDialog: false,
+      showPopUp: false,
       select: { title: 'Fipugram',},
       projekti: [
         { title: 'Fipugram',},
         { title: 'Rukovnik',},
         { title: 'ORGanize',},
       ],
+      months: [
+        {
+          name: "January",
+          tasks: [
+            {
+              name: "nav-bar",
+              status: "in progress"
+            },
+            {
+              name: "icons",
+              status: "in progress"
+            },
+            {
+              name: "login",
+              status: "finished"
+            },
+            {
+              name: "signup",
+              status: "in progress"
+            }
+          ]
+        },
+        {
+          name: "February",
+          tasks: [
+            {
+              name: "db setup",
+              status: "in progress"
+            },
+            {
+              name: "crud operations",
+              status: "finished"
+            }
+          ]
+        }, 
+        {
+          name: "March",
+          tasks: []
+        }
+      ]
     }
   },
   methods: {
@@ -203,7 +252,7 @@ export default {
       console.log(`Selected option: ${this.selectedOption}`);
     },
     openPopUp() {
-      this.popupDialog = true;
+      this.showPopUp = true;
     },
   },
 };
