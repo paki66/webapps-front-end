@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import WorkingStatusPopUp from "./WorkingStatusPopUp.vue";
+import WorkingStatusPopUp from "../views/WorkingStatusPopUp.vue";
 import store from "../store";
 export default {
   components: { WorkingStatusPopUp },

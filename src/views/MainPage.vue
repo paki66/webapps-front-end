@@ -32,7 +32,7 @@
 
     <v-col cols="2">
       <main-button 
-      @click="showPopUp = true"
+      @click="showNewProjectPopUp = true"
       size="large" 
       block
       >
@@ -41,12 +41,12 @@
         </v-icon> 
         
       </main-button>
-      <main-pop-up :dialog="showPopUp" @update:dialog="showPopUp = $event"></main-pop-up>
+      <new-project-pop-up :dialog="showNewProjectPopUp" @update:dialog="showNewProjectPopUp = $event"></new-project-pop-up>
     </v-col>
 
     <v-col cols="2">
       <v-btn size="large" block
-      v-model:dialog="showPopUp"> 
+      @click="showSearchPopUp = true"> 
         <v-icon 
         icon="mdi-magnify"
         color="black"
@@ -54,10 +54,11 @@
         </v-icon>
         Search
       </v-btn>
+      <search-pop-up :dialog="showSearchPopUp" @update:dialog="showSearchPopUp = $event"></search-pop-up>
     </v-col>
 
     <v-col cols="2">
-      <v-btn size="large" block="" v-model:dialog="showPopUp"> 
+      <v-btn size="large" @click="showStatusPopUp = true" block> 
         <v-icon 
         icon="mdi-account"
         color="black" 
@@ -65,10 +66,11 @@
         </v-icon>
         Person status
       </v-btn>
+      <status-pop-up :dialog="showStatusPopUp" @update:dialog="showStatusPopUp = $event"></status-pop-up>
     </v-col>
 
      <v-col cols="2">
-      <v-btn size="large" block="" v-model:dialog="showPopUp"> 
+      <v-btn size="large" @click="showFilterPopUp = true" block> 
         <v-icon 
         icon="mdi-filter"
         color="black"
@@ -76,10 +78,11 @@
         </v-icon>
         Filter
       </v-btn>
+      <filter-pop-up :dialog="showFilterPopUp" @update:dialog="showFilterPopUp = $event"></filter-pop-up>
     </v-col>
      <v-col cols="2">
       <v-btn size="large" block=""
-      v-model:dialog="showPopUp"> 
+      @click="showHistoryPopUp = true"> 
         <v-icon 
         icon="mdi-clock"
         color="black"
@@ -87,6 +90,7 @@
         </v-icon>
         History
       </v-btn>
+      <history-pop-up :dialog="showHistoryPopUp" @update:dialog="showHistoryPopUp = $event"></history-pop-up>
     </v-col>
   </v-row>
 
@@ -130,7 +134,11 @@
 <script>
 import MainButton from '@/components/MainButton.vue';
 import Month from '@/components/Month.vue';
-import MainPopUp from '@/components/MainPopUp.vue';
+import NewProjectPopUp from '@/views/NewProjectPopUp.vue';
+import StatusPopUp from './StatusPopUp.vue';
+import FilterPopUp from './FilterPopUp.vue';
+import SearchPopUp from './SearchPopUp.vue';
+import HistoryPopUp from './HistoryPopUp.vue';
 
 osobe
 
@@ -193,11 +201,15 @@ projekti: [
 
 
 export default {
-  components: { MainButton, Month, MainPopUp},
+  components: { MainButton, Month, NewProjectPopUp, StatusPopUp, SearchPopUp, FilterPopUp, HistoryPopUp},
   name: "MainPage",
   data() {
     return {
-      showPopUp: false,
+      showNewProjectPopUp: false,
+      showStatusPopUp: false,
+      showSearchPopUp: false,
+      showFilterPopUp: false,
+      showHistoryPopUp: false,
       select: { title: 'Fipugram',},
       projekti: [
         { title: 'Fipugram',},
@@ -250,10 +262,7 @@ export default {
     handleDropdownChange() {
       
       console.log(`Selected option: ${this.selectedOption}`);
-    },
-    openPopUp() {
-      this.showPopUp = true;
-    },
+    }
   },
 };
 </script>
