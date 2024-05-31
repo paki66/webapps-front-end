@@ -165,7 +165,46 @@ export default {
       showFilterPopUp: false,
       showHistoryPopUp: false,
       select: { naziv: data.project[0].naziv},
-      months: data.project[select].taskovi
+      months: [
+        {
+          name: "January",
+          tasks: [
+            {
+              name: "nav-bar",
+              status: "in progress"
+            },
+            {
+              name: "icons",
+              status: "in progress"
+            },
+            {
+              name: "login",
+              status: "finished"
+            },
+            {
+              name: "signup",
+              status: "in progress"
+            }
+          ]
+        },
+        {
+          name: "February",
+          tasks: [
+            {
+              name: "db setup",
+              status: "in progress"
+            },
+            {
+              name: "crud operations",
+              status: "finished"
+            }
+          ]
+        }, 
+        {
+          name: "March",
+          tasks: []
+        }
+      ]
     }
   },
   methods: {
