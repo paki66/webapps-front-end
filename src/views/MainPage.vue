@@ -13,9 +13,9 @@
 
       <v-select
         v-model="select"
-        :hint="`${select.title}`"
-        :items="projekti"
-        item-title="title"
+        :hint="`${select.naziv}`"
+        :items="projects"
+        item-title="naziv"
         label="Select"
         persistent-hint
         return-object
@@ -139,123 +139,33 @@ import StatusPopUp from './StatusPopUp.vue';
 import FilterPopUp from './FilterPopUp.vue';
 import SearchPopUp from './SearchPopUp.vue';
 import HistoryPopUp from './HistoryPopUp.vue';
+import data from '@/data';
 
-osobe
-
-:
-  [
-  {
-    "id": "1",
-    "name": "mihaela soldat"
-  },
-  {
-    "id": "2",
-    "name": "paolo bursic"
-  },
-  {
-    "id": "3",
-    "name": "John Doe"
-  }
-]
-task: [
-  {
-    "id": "1",
-    "month_year": "02-2024",
-    "person": "1",
-    "project": "1",
-  },
-  {
-    "id": "2",
-    "month_year": "01-2024",
-    "person": "1",
-    "project": "1",
-  },
-  {
-    "id": "3",
-    "month_year": "02-2024",
-    "person": "2",
-    "project": "1",
-  },
-  {
-    "id": "4",
-    "month_year": "02-2024",
-    "person": "2",
-    "project": "2",
-  }
-]
-
-projekti: [
-  {
-    "id": "1",
-    "title": "Fipugram",
-  },
-  {    
-    "id": "2",
-    "title": "rukovnik",
-  },
-  {
-    "id": "3",
-    "title": "ORGanize",
-  }
-]
-
+function extractNames(data) {
+  let names = [];
+  data.project.forEach(user => {
+    if (user.naziv) {
+      names.push(user.naziv);
+    }
+  });
+  console.log(names)
+  return names
+}
 
 export default {
   components: { MainButton, Month, NewProjectPopUp, StatusPopUp, SearchPopUp, FilterPopUp, HistoryPopUp},
   name: "MainPage",
   data() {
     return {
+      data,
+      projects: extractNames(data),
       showNewProjectPopUp: false,
       showStatusPopUp: false,
       showSearchPopUp: false,
       showFilterPopUp: false,
       showHistoryPopUp: false,
-      select: { title: 'Fipugram',},
-      projekti: [
-        { title: 'Fipugram',},
-        { title: 'Rukovnik',},
-        { title: 'ORGanize',},
-      ],
-      months: [
-        {
-          name: "January",
-          tasks: [
-            {
-              name: "nav-bar",
-              status: "in progress"
-            },
-            {
-              name: "icons",
-              status: "in progress"
-            },
-            {
-              name: "login",
-              status: "finished"
-            },
-            {
-              name: "signup",
-              status: "in progress"
-            }
-          ]
-        },
-        {
-          name: "February",
-          tasks: [
-            {
-              name: "db setup",
-              status: "in progress"
-            },
-            {
-              name: "crud operations",
-              status: "finished"
-            }
-          ]
-        }, 
-        {
-          name: "March",
-          tasks: []
-        }
-      ]
+      select: { naziv: data.project[0].naziv},
+      months: data.project[select].taskovi
     }
   },
   methods: {
