@@ -5,7 +5,12 @@
         <span class="headline">Check status of your co-workers</span>
       </v-card-title>
 
-
+      <v-card :user="user"
+          v-for="(user, index) in data.users" 
+          :key="index"> 
+          <v-card-title>{{user.ime}} {{user.prezime}} ---  {{user.status}} </v-card-title>
+          <v-card-item></v-card-item>
+      </v-card>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="red" @click="internalDialog = false">Close</v-btn>
@@ -16,7 +21,7 @@
 </template>
 
 <script>
-
+import data from "@/data";
 
 export default {
     props: {
@@ -30,6 +35,11 @@ export default {
       set(value) {
         this.$emit('update:dialog', value);
       }
+    }
+  },
+  data() {
+    return {
+      data
     }
   }
 };
