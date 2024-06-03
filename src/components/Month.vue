@@ -2,16 +2,24 @@
     
     <v-card>
         <v-card-title>
-            January
+            {{month.name}}
         </v-card-title>
-        <v-card-item>
-            nesto
-        </v-card-item>
-        <v-card-item>
-            nesto 2
-        </v-card-item>
+        <ul>
+            <task
+                  :task="task"
+                  v-for="(task, task_index) in month.tasks" 
+                  :key="task_index"
+               ></task>
+        </ul>
+        <div class="form-container" v-show="showFormContainer">
+        <form @submit.prevent="submitForm">
+            <!-- Your form fields go here -->
+            <label >Name:</label> <br>
+            <button type="submit">Submit</button>
+        </form>
+        </div>
         <v-card-actions>
-            <v-btn append-icon="mdi-plus">
+            <v-btn  @click="showForm" append-icon="mdi-plus">
                 Add task
             </v-btn>        
         </v-card-actions>
@@ -20,8 +28,29 @@
 </template>
 
 <script>
-
-export default ({
-    
-})
+import Task from "./Task.vue"
+export default {
+    props: ["month", "task"],
+    components: {Task},
+    data() {
+        return {
+            showFormContainer: false
+        }
+    },
+    methods: {
+      showForm() {
+        // Show the form container
+        this.showFormContainer = true;
+      },
+      submitForm() {
+        // Handle form submission logic here
+        console.log('Form submitted with data:', this.formData);
+        // Reset form data
+        this.formData.name = '';
+        this.formData.email = '';
+        // Hide the form container
+        this.showFormContainer = false;
+      }
+    }
+}
 </script>

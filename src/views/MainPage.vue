@@ -8,9 +8,9 @@
     <v-col cols="4">
       <v-select
         v-model="select"
-        :hint="`${select.title}`"
-        :items="projekti"
-        item-title="title"
+        :hint="`${select.naziv}`"
+        :items="projects"
+        item-title="naziv"
         label="Select"
         persistent-hint
         return-object
@@ -33,17 +33,25 @@
     <v-col cols="1"> </v-col>
 
     <v-col cols="2">
-      <main-button @click="openPopUp" size="large" block>
+      <main-button @click="showNewProjectPopUp = true" size="large" block>
         New project
         <v-icon icon="mdi-plus"> </v-icon>
       </main-button>
+      <new-project-pop-up
+        :dialog="showNewProjectPopUp"
+        @update:dialog="showNewProjectPopUp = $event"
+      ></new-project-pop-up>
     </v-col>
 
     <v-col cols="2">
-      <v-btn size="large" block>
+      <v-btn size="large" block @click="showSearchPopUp = true">
         <v-icon icon="mdi-magnify" color="black"> </v-icon>
         Search
       </v-btn>
+      <search-pop-up
+        :dialog="showSearchPopUp"
+        @update:dialog="showSearchPopUp = $event"
+      ></search-pop-up>
     </v-col>
 
     <v-col cols="2">
@@ -55,27 +63,45 @@
           @close="showPersonStatus = false"
         ></EmployeeStatus>
       </v-btn>
+      <status-pop-up
+        :dialog="showStatusPopUp"
+        @update:dialog="showStatusPopUp = $event"
+      ></status-pop-up>
     </v-col>
 
     <v-col cols="2">
-      <v-btn size="large" block="">
+      <v-btn size="large" @click="showFilterPopUp = true" block>
         <v-icon icon="mdi-filter" color="black"> </v-icon>
         Filter
       </v-btn>
+      <filter-pop-up
+        :dialog="showFilterPopUp"
+        @update:dialog="showFilterPopUp = $event"
+      ></filter-pop-up>
     </v-col>
     <v-col cols="2">
-      <v-btn size="large" block="">
+      <v-btn size="large" block="" @click="showHistoryPopUp = true">
         <v-icon icon="mdi-clock" color="black"> </v-icon>
         History
       </v-btn>
+      <history-pop-up
+        :dialog="showHistoryPopUp"
+        @update:dialog="showHistoryPopUp = $event"
+      ></history-pop-up>
     </v-col>
   </v-row>
 
   <v-row>
     <v-col cols="1"> </v-col>
     <v-col cols="10">
-      <month> </month>
-      <month> </month>
+      <ul>
+        <month
+          :month="month"
+          v-for="(month, month_index) in months"
+          :key="month_index"
+        >
+        </month>
+      </ul>
     </v-col>
   </v-row>
 
@@ -93,22 +119,85 @@
 <script>
 import MainButton from "@/components/MainButton.vue";
 import Month from "@/components/Month.vue";
-import NewProjectPopUp from "@/components/NewProjectPopUp.vue";
+import NewProjectPopUp from "@/views/NewProjectPopUp.vue";
+import FilterPopUp from "./FilterPopUp.vue";
+import SearchPopUp from "./SearchPopUp.vue";
+import HistoryPopUp from "./HistoryPopUp.vue";
+import data from "@/data";
 import EmployeeStatus from "@/components/EmployeeStatus.vue";
 
+function extractNames(data) {
+  let names = [];
+  data.project.forEach((user) => {
+    if (user.naziv) {
+      names.push(user.naziv);
+    }
+  });
+  console.log(names);
+  return names;
+}
+
 export default {
-  components: { MainButton, Month, NewProjectPopUp, EmployeeStatus },
+  components: {
+    MainButton,
+    Month,
+    NewProjectPopUp,
+    EmployeeStatus,
+    SearchPopUp,
+    FilterPopUp,
+    HistoryPopUp,
+  },
   name: "MainPage",
   data() {
     return {
-      popupDialog: false,
-      select: { title: "Fipugram" },
-      projekti: [
-        { title: "Fipugram" },
-        { title: "Rukovnik" },
-        { title: "ORGanize" },
-      ],
+      data,
+      projects: extractNames(data),
+      showNewProjectPopUp: false,
       showPersonStatus: false,
+      showSearchPopUp: false,
+      showFilterPopUp: false,
+      showHistoryPopUp: false,
+      select: { naziv: data.project[0].naziv },
+      months: [
+        {
+          name: "January",
+          tasks: [
+            {
+              name: "nav-bar",
+              status: "in progress",
+            },
+            {
+              name: "icons",
+              status: "in progress",
+            },
+            {
+              name: "login",
+              status: "finished",
+            },
+            {
+              name: "signup",
+              status: "in progress",
+            },
+          ],
+        },
+        {
+          name: "February",
+          tasks: [
+            {
+              name: "db setup",
+              status: "in progress",
+            },
+            {
+              name: "crud operations",
+              status: "finished",
+            },
+          ],
+        },
+        {
+          name: "March",
+          tasks: [],
+        },
+      ],
     };
   },
   methods: {
