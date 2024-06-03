@@ -249,7 +249,7 @@ export default {
   },
 
   async beforeMount() {
-    let response = await ProfileService.getUserInfo(this.loggedEmail);
+    let response = await ProfileService.getUserInfo(this._id);
     let results = response.data;
 
     this.userName = results.name + " " + results.surname;
@@ -267,7 +267,6 @@ export default {
       this.loading = true;
 
       store.user.email = this.email;
-      //store.user.password = this.password;
       try {
         if (this.tab === 1) {
           await this.updateInfo();

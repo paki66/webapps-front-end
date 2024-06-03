@@ -27,6 +27,16 @@ const store = reactive({
     { status: "Working remotely", icon: "mdi-home", color: "#000000" },
     { status: "On a vacation", icon: "mdi-airplane", color: "#3189e8" },
   ],
+  taskCategory: [
+    { index: 0, category: "New feature" },
+    { index: 1, category: "Bug" },
+    { index: 2, category: "Defect" },
+  ],
+  taskStatus: [
+    { index: 0, status: "To-Do" },
+    { index: 1, status: "Completed" },
+    { index: 2, status: "Expired" },
+  ],
 });
 
 export default store;
