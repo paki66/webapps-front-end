@@ -134,10 +134,8 @@ export default {
         let email = AuthService.getUser().email;
         let response = await ProfileService.getStatus(email);
         if ([4, 6].includes(response.data)) {
-          console.log("dođe li tu?");
           this.userStatus = response.data;
         } else {
-          console.log("u elsu 0");
           this.userStatus = 0;
           ProfileService.changeUserStatus({
             userId: AuthService.getUser()._id,
@@ -155,19 +153,3 @@ export default {
   },
 };
 </script>
-
-<!--
-      let email = AuthService.getUser().email;
-      let response = await ProfileService.getStatus(email);
-      if ([4, 6].includes(response.data)) {
-        console.log("dođe li tu?");
-        this.userStatus = response.data;
-      } else {
-        console.log("u elsu 0");
-        this.userStatus = 0;
-        ProfileService.changeUserStatus({
-          userId: AuthService.getUser()._id,
-          statusId: this.userStatus,
-        });
-      }
-    }-->

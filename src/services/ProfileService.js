@@ -1,7 +1,7 @@
-import service from "./Service";
+import { userService } from "./Service";
 
 function changeUserStatus(data) {
-  return service
+  return userService
     .patch("/changeStatus", data, {
       headers: {
         Authorization:
@@ -24,7 +24,7 @@ function getUserStatus() {
 
 async function getStatus(email) {
   try {
-    const response = await service.get("/changeStatus", {
+    const response = await userService.get("/changeStatus", {
       headers: {
         Authorization:
           "Bearer " + JSON.parse(localStorage.getItem("user")).token,
@@ -40,7 +40,7 @@ async function getStatus(email) {
   }
 }
 function changePassword(data) {
-  return service
+  return userService
     .patch("/changePassword", data, {
       headers: {
         Authorization:
@@ -50,15 +50,12 @@ function changePassword(data) {
     .then((response) => response);
 }
 
-async function getUserInfo(email) {
+async function getUserInfo(userId) {
   try {
-    const response = await service.get("/userInfo", {
+    const response = await userService.get("/userInfo?userId=" + userId, {
       headers: {
         Authorization:
           "Bearer " + JSON.parse(localStorage.getItem("user")).token,
-      },
-      params: {
-        email: email,
       },
     });
     return response.data;
@@ -68,7 +65,7 @@ async function getUserInfo(email) {
   }
 }
 function updateInfo(data) {
-  return service
+  return userService
     .patch("/userInfo", data, {
       headers: {
         Authorization:
@@ -80,13 +77,10 @@ function updateInfo(data) {
 
 async function deleteProfile(_id) {
   try {
-    const response = await service.delete("/deleteProfile", {
+    const response = await userService.delete("/deleteProfile?_id=" + _id, {
       headers: {
         Authorization:
           "Bearer " + JSON.parse(localStorage.getItem("user")).token,
-      },
-      params: {
-        _id: _id,
       },
     });
     return response;

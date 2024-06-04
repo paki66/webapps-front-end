@@ -1,5 +1,5 @@
 import ProfileService from "./ProfileService";
-import service from "./Service";
+import { userService } from "./Service";
 
 function signup(user) {
   service.post("/signup", user).then((response) => {
@@ -7,7 +7,7 @@ function signup(user) {
   });
 }
 function login(loginData) {
-  return service
+  return userService
     .post("/login", loginData)
     .then((response) => {
       if (response.status === 200) {

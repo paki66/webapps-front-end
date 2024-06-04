@@ -88,10 +88,8 @@ export default {
   async updated() {
     if (!localStorage.getItem("userStatus")) {
       this.userStatus = 0;
-      if (localStorage.getItem("user")) {
-        let email = AuthService.getUser().email;
-        let response = await ProfileService.getStatus(email);
-        this.userStatus = response.data;
+      if (localStorage.getItem("userStatus")) {
+        this.userStatus = ProfileService.getUserStatus();
       }
     }
   },

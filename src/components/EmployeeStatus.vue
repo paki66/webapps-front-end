@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="800">
+  <v-dialog v-model="dialog" max-width="800" persistent>
     <v-card>
       <v-card-title class="d-flex justify-space-between align-center">
         <span class="headline">Employee Status</span>
@@ -9,12 +9,6 @@
       </v-card-title>
       <v-container>
         <v-row>
-          <!--<v-col v-for="employee in employees" :key="employee._id" cols="12">
-              <div>
-                {{ employee.name }} {{ employee.surname }} -
-                {{ employee.email }} (Status: {{ employee.status }})
-              </div>
-            </v-col>-->
           <v-data-table :items="employees"></v-data-table>
         </v-row>
       </v-container>

@@ -1,8 +1,8 @@
-import service from "./Service";
+import { userService } from "./Service";
 
 async function getAllStatuses() {
   try {
-    const response = await service.get("/userStatuses", {
+    const response = await userService.get("/userStatuses", {
       headers: {
         Authorization:
           "Bearer " + JSON.parse(localStorage.getItem("user")).token,
