@@ -108,7 +108,7 @@
       </v-btn>
     </v-col>
   </v-row>
-  <v-row>
+  <v-row v-if="filteredTasks !== null && filteredTasks.length">
     <v-col cols="1"> </v-col>
     <v-col cols="10">
       <v-card
@@ -128,15 +128,20 @@
                 <v-list-item-subtitle
                   >Category:
                   {{ getCategory(task.category) }}</v-list-item-subtitle
-                ><v-list-item-subtitle
+                >
+                <v-list-item-subtitle
                   >Employee: {{ task.employee }}</v-list-item-subtitle
-                ><v-list-item-subtitle
+                >
+                <v-list-item-subtitle
                   >Deadline: {{ task.deadline }}</v-list-item-subtitle
-                ><v-list-item-subtitle
+                >
+                <v-list-item-subtitle
                   >Expected time: {{ task.expected_time }}</v-list-item-subtitle
-                ><v-list-item-subtitle
+                >
+                <v-list-item-subtitle
                   >Taken time: {{ task.taken_time }}</v-list-item-subtitle
-                ><v-list-item-subtitle
+                >
+                <v-list-item-subtitle
                   >Status: {{ getStatus(task.status) }}</v-list-item-subtitle
                 >
               </v-list-item-content>
@@ -150,6 +155,12 @@
           </v-list>
         </v-card-text>
       </v-card>
+    </v-col>
+  </v-row>
+  <v-row v-else>
+    <v-col cols="1"></v-col>
+    <v-col cols="10">
+      <p>No tasks found for this project.</p>
     </v-col>
   </v-row>
 
@@ -184,7 +195,7 @@ import ProfileService from "@/services/ProfileService";
 import ProjectService from "@/services/ProjectService";
 import TaskService from "@/services/TaskService";
 import store from "@/store";
-import TaskDialog from './TaskDialog.vue';
+import TaskDialog from "./TaskDialog.vue";
 
 export default {
   components: {
@@ -194,7 +205,7 @@ export default {
     EmployeeStatus,
     FilterPopUp,
     HistoryPopUp,
-    TaskDialog
+    TaskDialog,
   },
   name: "MainPage",
   data() {
@@ -335,13 +346,16 @@ export default {
       this.filteredTasks = this.allTasks;
     },
     openCreateTaskDialog() {
-      this.TaskDialogTitle = 'Create Component';
-      this.TaskDialogData = { name: '', description: '' }; 
+      this.TaskDialogTitle = "Create Component";
+      this.TaskDialogData = { name: "", description: "" };
       this.showTaskDialog = true;
     },
     openEditTaskDialog() {
-      this.TaskDialogTitle = 'Edit Component';
-      this.TaskDialogData = { name: 'Existing Component', description: 'Some description' };
+      this.TaskDialogTitle = "Edit Component";
+      this.TaskDialogData = {
+        name: "Existing Component",
+        description: "Some description",
+      };
       this.showTaskDialog = true;
     },
     closeTaskDialog() {
