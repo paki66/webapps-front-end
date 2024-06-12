@@ -35,7 +35,17 @@ async function getEmployeeProjects(userId) {
   }
 }
 
+async function createProject(name) {
+  try {
+    const response = await projectService.post('/projects', name);
+  }
+  catch (error) {
+    throw error
+  }
+}
+
 export default {
   getManagerProjects,
   getEmployeeProjects,
+  createProject,
 };

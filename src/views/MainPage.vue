@@ -140,7 +140,15 @@
                   >Status: {{ getStatus(task.status) }}</v-list-item-subtitle
                 >
               </v-list-item-content>
+              <v-list-item-action>
+                <v-btn @click="openEditTaskDialog">edit</v-btn>
+                <v-btn>delete</v-btn>
+              </v-list-item-action>
             </v-list-item>
+
+            
+
+          
           </v-list>
         </v-card-text>
       </v-card>
@@ -153,9 +161,17 @@
     <v-col cols="1"> </v-col>
 
     <v-col cols="2">
-      <v-btn append-icon="mdi-plus" size="x-large"> Add month </v-btn>
+      <v-btn append-icon="mdi-plus" size="x-large" @click="openCreateTaskDialog"> Add report </v-btn>
     </v-col>
   </v-row>
+
+  <task-dialog
+    v-if="showTaskDialog"
+    :title="taskDialogTitle"
+    :data="taskDialogData"
+    @close="closeTaskDialog"
+    :visible.sync="showTaskDialog"
+  ></task-dialog>
 </template>
 
 <script>
@@ -171,6 +187,7 @@ import ProfileService from "@/services/ProfileService";
 import ProjectService from "@/services/ProjectService";
 import TaskService from "@/services/TaskService";
 import store from "@/store";
+import TaskDialog from './TaskDialog.vue';
 
 export default {
   components: {
@@ -180,6 +197,7 @@ export default {
     EmployeeStatus,
     FilterPopUp,
     HistoryPopUp,
+    TaskDialog
   },
   name: "MainPage",
   data() {
@@ -201,6 +219,10 @@ export default {
       categoryFilter: [],
 
       keyword: null,
+
+      showTaskDialog: false,
+      TaskDialogTitle: '',
+      TaskDialogData: {},
     };
   },
   async beforeCreate() {
@@ -312,6 +334,19 @@ export default {
       this.statusFilter = [];
       this.categoryFilter = [];
       this.filteredTasks = this.allTasks;
+    },
+    openCreateTaskDialog() {
+      this.TaskDialogTitle = 'Create Component';
+      this.TaskDialogData = { name: '', description: '' }; 
+      this.showTaskDialog = true;
+    },
+    openEditTaskDialog() {
+      this.TaskDialogTitle = 'Edit Component';
+      this.TaskDialogData = { name: 'Existing Component', description: 'Some description' };
+      this.showTaskDialog = true;
+    },
+    closeTaskDialog() {
+      this.showTaskDialog = false;
     },
   },
 };
