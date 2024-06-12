@@ -4,7 +4,7 @@
       <v-card-title>
         <span class="headline">Create new project</span>
       </v-card-title>
-      <v-text-field label="New project name"></v-text-field>
+      <v-text-field v-model="projectName" label="New project name"></v-text-field>
 
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -17,9 +17,15 @@
 </template>
 
 <script>
+import createProject from "@/services/ProjectService"
 export default {
     props: {
     dialog: Boolean
+  },
+  data() {
+    return {
+      projectName: ''
+    }
   },
   computed: {
     internalDialog: {
@@ -28,6 +34,16 @@ export default {
       },
       set(value) {
         this.$emit('update:dialog', value);
+      }
+    }
+  },
+  methods: {
+    async handleCreate() {
+      try {
+        const response = await createProject({ name: this.projectName }); 
+        this.internalDialog = false; 
+      } catch (error) {
+        console.error('Error creating project:', error);
       }
     }
   }

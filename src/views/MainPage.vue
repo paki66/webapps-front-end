@@ -164,14 +164,6 @@
       <v-btn append-icon="mdi-plus" size="x-large" @click="openCreateTaskDialog"> Add report </v-btn>
     </v-col>
   </v-row>
-
-  <task-dialog
-    v-if="showTaskDialog"
-    :title="taskDialogTitle"
-    :data="taskDialogData"
-    @close="closeTaskDialog"
-    :visible.sync="showTaskDialog"
-  ></task-dialog>
 </template>
 
 <script>
