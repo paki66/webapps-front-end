@@ -141,12 +141,10 @@
                 >
               </v-list-item-content>
               <v-list-item-action>
-                <v-btn @click="openEditTaskDialog">edit</v-btn>
+                <task-dialog :buttonText="editText"></task-dialog>
                 <v-btn>delete</v-btn>
               </v-list-item-action>
             </v-list-item>
-
-            
 
           
           </v-list>
@@ -158,12 +156,19 @@
   <br />
 
   <v-row>
-    <v-col cols="1"> </v-col>
 
     <v-col cols="2">
-      <v-btn append-icon="mdi-plus" size="x-large" @click="openCreateTaskDialog"> Add report </v-btn>
+        <task-dialog
+    :buttonText="addText"
+
+    :isOpen="showTaskDialog"
+     @close="closeTaskDialog">
+  </task-dialog>
     </v-col>
   </v-row>
+
+
+
 </template>
 
 <script>
@@ -213,8 +218,10 @@ export default {
       keyword: null,
 
       showTaskDialog: false,
-      TaskDialogTitle: '',
-      TaskDialogData: {},
+      editTitle: "Edit task",
+      addTitle: "Add new task",
+      addText: "Add report",
+      editText: "EDIT"
     };
   },
   async beforeCreate() {

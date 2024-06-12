@@ -1,14 +1,18 @@
 <template>
   <div class="pa-4 text-center">
-    <h1>task</h1>
     <v-dialog
-      v-model="visiblefun"
+      v-model="dialog"
       max-width="600"
     >
+      <template v-slot:activator="{ props: activatorProps }">
+        <v-btn
+          v-bind="activatorProps"
+        >{{buttonText}}</v-btn>
+      </template>
 
       <v-card
         prepend-icon="mdi-account"
-        title="User Profile"
+        title="Add/edit task"
       >
         <v-card-text>
           <v-row dense>
@@ -18,7 +22,7 @@
               sm="6"
             >
               <v-text-field
-                label="First name*"
+                label="Empoloyee"
                 required
               ></v-text-field>
             </v-col>
@@ -30,7 +34,7 @@
             >
               <v-text-field
                 hint="example of helper text only on focus"
-                label="Middle name"
+                label="Title"
               ></v-text-field>
             </v-col>
 
@@ -41,7 +45,7 @@
             >
               <v-text-field
                 hint="example of persistent helper text"
-                label="Last name*"
+                label="Taken time"
                 persistent-hint
                 required
               ></v-text-field>
@@ -53,7 +57,7 @@
               sm="6"
             >
               <v-text-field
-                label="Email*"
+                label="Expected time"
                 required
               ></v-text-field>
             </v-col>
@@ -61,35 +65,12 @@
             <v-col
               cols="12"
               md="4"
-              sm="6"
-            >
-              <v-text-field
-                label="Password*"
-                type="password"
-                required
-              ></v-text-field>
-            </v-col>
-
-            <v-col
-              cols="12"
-              md="4"
-              sm="6"
-            >
-              <v-text-field
-                label="Confirm Password*"
-                type="password"
-                required
-              ></v-text-field>
-            </v-col>
-
-            <v-col
-              cols="12"
               sm="6"
             >
               <v-select
-                :items="['0-17', '18-29', '30-54', '54+']"
-                label="Age*"
-                required
+                :items="['completed', 'expired', 'to-do']"
+                label="Status"
+                v-model="defaultStatus"
               ></v-select>
             </v-col>
 
@@ -97,16 +78,18 @@
               cols="12"
               sm="6"
             >
-              <v-autocomplete
-                :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                label="Interests"
-                auto-select-first
-                multiple
-              ></v-autocomplete>
+              <v-select
+                :items="['new feature', 'bug', 'defect']"
+                label="Category"
+                required
+              ></v-select>
             </v-col>
-          </v-row>
 
-          <small class="text-caption text-medium-emphasis">*indicates required field</small>
+            
+          </v-row>
+          <v-label>Set deadline</v-label>
+          <v-date-picker></v-date-picker>
+
         </v-card-text>
 
         <v-divider></v-divider>
@@ -124,59 +107,65 @@
             color="primary"
             text="Save"
             variant="tonal"
-            @click="dialog = false"
+            @click="determine"
           ></v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
 </template>
-
-
 <script>
+
 export default {
   props: {
     title: String,
-    data: Object,
+    content: Object,
     showTaskDialog: Boolean,
+    buttonText: String
   },
   data() {
     return {
+        defaultStatus: "to-do",
       formData: { ...this.data },
+      dialog:false
     };
   },
-  watch: {
-    data(newData) {
-      this.formData = { ...newData };
-    },
-  },
   methods: {
-    updateVisibility(value) {
-      this.$emit('update:visible', value);
-    },
-    close() {
-      this.$emit('update:visible', false);
-    },
     submit() {
       console.log('Submitted data:', this.formData);
-      this.close();
+      this.$emit('close');
     },
-  },
-  computed: {
-    visiblefun: {
-      get() {
-        return this.showTaskDialog;
-      },
-      set(value) {
-        this.$emit('update:dialog', value);
-      }
+    determine() {
+        this.dialog = false
+        if (this.buttonText == "EDIT") {
+            editTask()
+        }
+        else{
+            createTask()
+        }
+    }, 
+    editTask() {
+        console.log("adr")
     }
   },
 };
 </script>
 
 <style>
-.task-dialog {
-  max-width: 500px;
+.dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+.dialog-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
 }
 </style>
