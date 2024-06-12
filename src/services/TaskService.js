@@ -11,6 +11,7 @@ async function getProjectTasks(projectId) {
         },
       }
     );
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching projects:", error);
