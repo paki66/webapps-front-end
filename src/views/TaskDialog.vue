@@ -22,6 +22,7 @@
               sm="6"
             >
               <v-text-field
+                v-model="employee"
                 label="Empoloyee"
                 required
               ></v-text-field>
@@ -35,6 +36,7 @@
               <v-text-field
                 hint="example of helper text only on focus"
                 label="Title"
+                v-model="taskTitle"
               ></v-text-field>
             </v-col>
 
@@ -44,7 +46,7 @@
               sm="6"
             >
               <v-text-field
-                hint="example of persistent helper text"
+                v-model="takenTime"
                 label="Taken time"
                 persistent-hint
                 required
@@ -79,6 +81,7 @@
               sm="6"
             >
               <v-select
+              v-model="category"
                 :items="['new feature', 'bug', 'defect']"
                 label="Category"
                 required
@@ -115,19 +118,31 @@
   </div>
 </template>
 <script>
+import TaskService from '@/services/TaskService';
+import data from '@/data';
 
 export default {
   props: {
     title: String,
     content: Object,
     showTaskDialog: Boolean,
-    buttonText: String
+    buttonText: String,
+    project_id: String,
+    
   },
   data() {
     return {
         defaultStatus: "to-do",
       formData: { ...this.data },
-      dialog:false
+      dialog:false,
+      employee: "",
+        taskTitle: "",
+        takenTime: "",
+        category: "",
+        status: "",
+        deadline: new Date(),
+        expectedTime: "",
+        
     };
   },
   methods: {
@@ -144,8 +159,36 @@ export default {
             createTask()
         }
     }, 
-    editTask() {
-        console.log("adr")
+    async editTask() {
+      try {
+        const response = await TaskService.putTask({
+          
+        });
+        this.internalDialog = false;
+      } catch (error) {
+        console.error("Error creating project:", error);
+      }
+    },
+    async createTask() {
+        const month = deadline.getUTCMonth + 1
+        const year = this.deadline.getUTCFullYear
+
+        try {
+        const response = await TaskService.postTask({
+          project_id: this.project_id._id,
+          title: this.title,
+          month_year: `${month}-${year}`,
+          employee: this.employee,
+          category: this.category,
+          status: this.status,
+          deadline: this.deadline,
+          expected_time: this.expectedTime,
+          taken_time: this.takenTime
+        });
+        this.internalDialog = false;
+      } catch (error) {
+        console.error("Error creating task:", error);
+      }
     }
   },
 };

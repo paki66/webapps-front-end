@@ -18,4 +18,13 @@ async function getProjectTasks(projectId) {
     throw error;
   }
 }
-export default { getProjectTasks };
+
+async function putTask() {
+
+}
+
+async function postTask() {
+
+}
+
+export default { getProjectTasks, putTask, postTask };

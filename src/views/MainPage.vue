@@ -171,7 +171,7 @@
     <v-col cols="2">
         <task-dialog
     :buttonText="addText"
-
+    :projectId="select"
     :isOpen="showTaskDialog"
      @close="closeTaskDialog">
   </task-dialog>
