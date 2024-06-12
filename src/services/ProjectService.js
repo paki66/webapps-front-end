@@ -35,12 +35,17 @@ async function getEmployeeProjects(userId) {
   }
 }
 
-async function createProject(name) {
+async function createProject(projectData) {
   try {
-    const response = await projectService.post('/projects', name);
-  }
-  catch (error) {
-    throw error
+    const response = await projectService.post("/", projectData, {
+      headers: {
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("user")).token,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
   }
 }
 
