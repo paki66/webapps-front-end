@@ -51,10 +51,6 @@
           @close="showPersonStatus = false"
         ></EmployeeStatus>
       </v-btn>
-      <status-pop-up
-        :dialog="showStatusPopUp"
-        @update:dialog="showStatusPopUp = $event"
-      ></status-pop-up>
     </v-col>
 
     <v-col cols="2">
@@ -133,7 +129,8 @@
                   >Employee: {{ task.employee }}</v-list-item-subtitle
                 >
                 <v-list-item-subtitle
-                  >Deadline: {{ task.deadline }}</v-list-item-subtitle
+                  >Deadline:
+                  {{ convertISOToDate(task.deadline) }}</v-list-item-subtitle
                 >
                 <v-list-item-subtitle
                   >Expected time: {{ task.expected_time }}</v-list-item-subtitle
@@ -146,12 +143,17 @@
                 >
               </v-list-item-content>
               <v-list-item-action>
-                <task-dialog :buttonText="editText"></task-dialog>
+                <TaskDialog
+                  v-if="(showTaskDialog = true)"
+                  :buttonText="editText"
+                  :isEdit="true"
+                  :taskId="task._id"
+                  @close="showTaskDialog = false"
+                  @update="updateTask"
+                ></TaskDialog>
                 <v-btn>delete</v-btn>
               </v-list-item-action>
             </v-list-item>
-
-          
           </v-list>
         </v-card-text>
       </v-card>
@@ -167,19 +169,17 @@
   <br />
 
   <v-row>
-
-    <v-col cols="2">
-        <task-dialog
-    :buttonText="addText"
-    :projectId="select"
-    :isOpen="showTaskDialog"
-     @close="closeTaskDialog">
-  </task-dialog>
+    <v-col cols="1"></v-col>
+    <v-col cols="1">
+      <TaskDialog
+        v-if="(showTaskDialog = true)"
+        :buttonText="addText"
+        :isEdit="false"
+        @close="showTaskDialog = false"
+        @create="createTask"
+      ></TaskDialog>
     </v-col>
   </v-row>
-
-
-
 </template>
 
 <script>
@@ -231,8 +231,8 @@ export default {
       showTaskDialog: false,
       editTitle: "Edit task",
       addTitle: "Add new task",
-      addText: "Add report",
-      editText: "EDIT"
+      addText: "Add task",
+      editText: "EDIT",
     };
   },
   async beforeCreate() {
@@ -345,18 +345,72 @@ export default {
       this.categoryFilter = [];
       this.filteredTasks = this.allTasks;
     },
-    openCreateTaskDialog() {
-      this.TaskDialogTitle = "Create Component";
-      this.TaskDialogData = { name: "", description: "" };
+    openEditTaskDialog() {
+      this.isEdit = true;
+      this.currentTask = task;
       this.showTaskDialog = true;
     },
-    openEditTaskDialog() {
-      this.TaskDialogTitle = "Edit Component";
-      this.TaskDialogData = {
-        name: "Existing Component",
-        description: "Some description",
-      };
-      this.showTaskDialog = true;
+
+    async createTask(newTask) {
+      let projectId;
+      console.log("newTask je:", newTask, projectId);
+      const month = newTask.deadline.getUTCMonth() + 1;
+      const year = newTask.deadline.getUTCFullYear();
+
+      const formattedDate = `${month.toString().padStart(2, "0")}-${year}`;
+
+      const formattedDeadline = newTask.deadline
+        ? new Date(
+            newTask.deadline.getTime() -
+              newTask.deadline.getTimezoneOffset() * 60000
+          ).toISOString()
+        : null;
+
+      const response = await TaskService.postTask({
+        projectId: this.select._id,
+        employee: newTask.employee,
+        title: newTask.title,
+        month_year: formattedDate,
+        taken_time: newTask.taken_time,
+        expected_time: newTask.expected_time,
+        status: newTask.status,
+        category: newTask.category,
+        deadline: formattedDeadline,
+      });
+    },
+    convertISOToDate(isoString) {
+      const date = new Date(isoString);
+      const dateString = date.toString();
+      return dateString;
+    },
+
+    async updateTask(task) {
+      let projectId;
+      let taskId = task.task_id;
+      console.log("newTask je:", task, taskId);
+      const month = task.deadline.getUTCMonth() + 1;
+      const year = task.deadline.getUTCFullYear();
+
+      const formattedDate = `${month.toString().padStart(2, "0")}-${year}`;
+
+      const formattedDeadline = task.deadline
+        ? new Date(
+            task.deadline.getTime() - task.deadline.getTimezoneOffset() * 60000
+          ).toISOString()
+        : null;
+
+      const response = await TaskService.putTask({
+        projectId: this.select._id,
+        taskId: taskId,
+        employee: task.employee,
+        title: task.title,
+        month_year: formattedDate,
+        taken_time: task.taken_time,
+        expected_time: task.expected_time,
+        status: task.status,
+        category: task.category,
+        deadline: formattedDeadline,
+      });
     },
     closeTaskDialog() {
       this.showTaskDialog = false;

@@ -19,12 +19,32 @@ async function getProjectTasks(projectId) {
   }
 }
 
-async function putTask() {
-
+async function putTask(taskData) {
+  try {
+    const response = await tasksService.put("/", taskData, {
+      headers: {
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("user")).token,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
-async function postTask() {
-
+async function postTask(taskData) {
+  try {
+    const response = await tasksService.post("/", taskData, {
+      headers: {
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("user")).token,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export default { getProjectTasks, putTask, postTask };
