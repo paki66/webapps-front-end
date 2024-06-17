@@ -11,7 +11,6 @@ async function getProjectTasks(projectId) {
         },
       }
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching projects:", error);
@@ -47,4 +46,32 @@ async function postTask(taskData) {
   }
 }
 
-export default { getProjectTasks, putTask, postTask };
+async function deleteTask(id) {
+  try {
+    const response = await tasksService.delete("/?id=" + id, {
+      headers: {
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("user")).token,
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getTasksForReport() {
+  try {
+    const response = await tasksService.post("/", taskData, {
+      headers: {
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("user")).token,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export default { getProjectTasks, putTask, postTask, deleteTask };

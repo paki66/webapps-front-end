@@ -47,6 +47,7 @@ export default {
           name: this.projectName,
         });
         this.internalDialog = false;
+        location.reload();
       } catch (error) {
         console.error("Error creating project:", error);
       }

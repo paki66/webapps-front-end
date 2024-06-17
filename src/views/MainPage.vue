@@ -150,8 +150,41 @@
                   :taskId="task._id"
                   @close="showTaskDialog = false"
                   @update="updateTask"
-                ></TaskDialog>
-                <v-btn>delete</v-btn>
+                ></TaskDialog
+                ><v-col cols="1">
+                  <v-btn
+                    :loading="loading"
+                    block
+                    color="black"
+                    @click="dialog = true"
+                    variant="elevated"
+                    >Delete</v-btn
+                  >
+                </v-col>
+                <v-dialog v-model="dialog" width="500">
+                  <v-card>
+                    <v-card-title class="headline grey lighten-2" primary-title>
+                      Delete the task?
+                    </v-card-title>
+
+                    <v-card-text>
+                      Are you sure you want to delete this task? This action
+                      cannot be undone.
+                    </v-card-text>
+
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="primary" text @click="dialog = false">
+                        Cancel
+                      </v-btn>
+                      <v-btn color="red" text @click="deleteTask(task._id)">
+                        Confirm
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
               </v-list-item-action>
             </v-list-item>
           </v-list>
@@ -212,6 +245,7 @@ export default {
     return {
       data,
       popupDialog: false,
+      dialog: false,
       select: null,
       allProjects: [], //za dropdown
       showNewProjectPopUp: false,
@@ -308,8 +342,6 @@ export default {
           }
         }
       }
-
-      console.log("Filtered Tasks: ", this.filteredTasks);
     },
 
     searchByTitle() {
@@ -352,8 +384,6 @@ export default {
     },
 
     async createTask(newTask) {
-      let projectId;
-      console.log("newTask je:", newTask, projectId);
       const month = newTask.deadline.getUTCMonth() + 1;
       const year = newTask.deadline.getUTCFullYear();
 
@@ -377,6 +407,7 @@ export default {
         category: newTask.category,
         deadline: formattedDeadline,
       });
+      location.reload();
     },
     convertISOToDate(isoString) {
       const date = new Date(isoString);
@@ -385,9 +416,7 @@ export default {
     },
 
     async updateTask(task) {
-      let projectId;
       let taskId = task.task_id;
-      console.log("newTask je:", task, taskId);
       const month = task.deadline.getUTCMonth() + 1;
       const year = task.deadline.getUTCFullYear();
 
@@ -411,6 +440,17 @@ export default {
         category: task.category,
         deadline: formattedDeadline,
       });
+      location.reload();
+    },
+
+    async deleteTask(id) {
+      const response = await TaskService.deleteTask(id);
+      this.dialog = false;
+
+      if (response.status === 200) {
+        alert("You have successfully deleted your task.");
+        location.reload();
+      }
     },
     closeTaskDialog() {
       this.showTaskDialog = false;
