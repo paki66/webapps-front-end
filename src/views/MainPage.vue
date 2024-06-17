@@ -67,10 +67,11 @@
     <v-col cols="2">
       <v-btn size="large" block="" @click="showHistoryPopUp = true">
         <v-icon icon="mdi-clock" color="black"> </v-icon>
-        History
+        Report
       </v-btn>
       <history-pop-up
         :dialog="showHistoryPopUp"
+        :projectId="select?._id"
         @update:dialog="showHistoryPopUp = $event"
       ></history-pop-up>
     </v-col>
@@ -217,9 +218,8 @@
 
 <script>
 import MainButton from "@/components/MainButton.vue";
-import Month from "@/components/Month.vue";
-import NewProjectPopUp from "@/views/NewProjectPopUp.vue";
-import HistoryPopUp from "./HistoryPopUp.vue";
+import NewProjectPopUp from "@/components/NewProjectPopUp.vue";
+import HistoryPopUp from "../components/HistoryPopUp.vue";
 import data from "@/data";
 import EmployeeStatus from "@/components/EmployeeStatus.vue";
 import FilterPopUp from "@/components/FilterPopUp.vue";
@@ -233,7 +233,6 @@ import TaskDialog from "./TaskDialog.vue";
 export default {
   components: {
     MainButton,
-    Month,
     NewProjectPopUp,
     EmployeeStatus,
     FilterPopUp,
@@ -377,12 +376,6 @@ export default {
       this.categoryFilter = [];
       this.filteredTasks = this.allTasks;
     },
-    openEditTaskDialog() {
-      this.isEdit = true;
-      this.currentTask = task;
-      this.showTaskDialog = true;
-    },
-
     async createTask(newTask) {
       const month = newTask.deadline.getUTCMonth() + 1;
       const year = newTask.deadline.getUTCFullYear();

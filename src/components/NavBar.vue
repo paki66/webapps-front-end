@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import WorkingStatusPopUp from "../views/WorkingStatusPopUp.vue";
+import WorkingStatusPopUp from "./WorkingStatusPopUp.vue";
 import store from "../store";
 import AuthService from "@/services/AuthService";
 import ProfileService from "@/services/ProfileService";

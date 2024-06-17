@@ -53,14 +53,21 @@ export default {
       this.dialog = false;
       this.$emit("close");
     },
-    onSubmit() {
+    async onSubmit() {
       this.loading = true;
       let user = AuthService.getUser();
-      ProfileService.changeUserStatus({
-        userId: user._id,
-        statusId: this.radios,
-      });
-      this.closeDialog();
+      try {
+        await ProfileService.changeUserStatus({
+          userId: user._id,
+          statusId: this.radios,
+        });
+        this.closeDialog();
+        location.reload();
+      } catch (error) {
+        console.error("Error changing user status:", error);
+      } finally {
+        this.loading = false;
+      }
     },
   },
 };

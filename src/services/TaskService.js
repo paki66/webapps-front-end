@@ -60,9 +60,11 @@ async function deleteTask(id) {
   }
 }
 
-async function getTasksForReport() {
+async function getTasksForReport(taskData) {
   try {
-    const response = await tasksService.post("/", taskData, {
+    const queryString = new URLSearchParams(taskData).toString();
+
+    const response = await tasksService.get("/getReportTasks?" + queryString, {
       headers: {
         Authorization:
           "Bearer " + JSON.parse(localStorage.getItem("user")).token,
@@ -74,4 +76,10 @@ async function getTasksForReport() {
   }
 }
 
-export default { getProjectTasks, putTask, postTask, deleteTask };
+export default {
+  getProjectTasks,
+  putTask,
+  postTask,
+  deleteTask,
+  getTasksForReport,
+};
