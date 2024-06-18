@@ -1,15 +1,15 @@
 import axios from "axios";
 
 const userService = axios.create({
-  baseURL: "http://localhost:3000/users",
+  baseURL: "https://webapps-back-end.vercel.app/users",
 });
 
 const projectService = axios.create({
-  baseURL: "http://localhost:3000/api/projects",
+  baseURL: "https://webapps-back-end.vercel.app/api/projects",
 });
 
 const tasksService = axios.create({
-  baseURL: "http://localhost:3000/api/tasks",
+  baseURL: "https://webapps-back-end.vercel.app/api/tasks",
 });
 
 export { userService, projectService, tasksService };
