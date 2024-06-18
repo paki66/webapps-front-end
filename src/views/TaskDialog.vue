@@ -8,7 +8,7 @@
       <v-card prepend-icon="mdi-account" title="Add/edit task">
         <v-card-text>
           <v-row dense>
-            <v-col cols="12" md="4" sm="6">
+            <v-col cols="12" md="4" sm="6" v-if="userRole !== 'Employee'">
               <v-text-field
                 v-model="employee"
                 label="Employee"
@@ -16,7 +16,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="4" sm="6">
+            <v-col cols="12" md="4" sm="6" v-if="userRole !== 'Employee'">
               <v-text-field v-model="title" label="Title"></v-text-field>
             </v-col>
             <v-text-field
@@ -24,7 +24,7 @@
               label="Taken time"
             ></v-text-field>
 
-            <v-col cols="12" md="4" sm="6">
+            <v-col cols="12" md="4" sm="6" v-if="userRole !== 'Employee'">
               <v-text-field
                 v-model="expected_time"
                 label="Expected time"
@@ -43,7 +43,7 @@
               ></v-select>
             </v-col>
 
-            <v-col cols="12" sm="6">
+            <v-col cols="12" sm="6" v-if="userRole !== 'Employee'">
               <v-select
                 v-model="category"
                 :readonly="loading"
@@ -58,8 +58,11 @@
               ></v-select>
             </v-col>
           </v-row>
-          <v-label>Set deadline</v-label>
-          <v-date-picker v-model="deadline"></v-date-picker>
+          <v-label v-if="userRole !== 'Employee'">Set deadline</v-label>
+          <v-date-picker
+            v-model="deadline"
+            v-if="userRole !== 'Employee'"
+          ></v-date-picker>
         </v-card-text>
 
         <v-divider></v-divider>
@@ -91,6 +94,7 @@ export default {
     buttonText: String,
     isEdit: Boolean,
     taskId: String,
+    userRole: String,
   },
   data() {
     return {
@@ -120,7 +124,7 @@ export default {
       this.$emit("close");
     },
     handleSave() {
-      if (this.isEdit) {
+      if (this.isEdit && this.userRole == "Manager") {
         this.$emit("update", {
           task_id: this.taskId,
           employee: this.employee,
@@ -131,7 +135,14 @@ export default {
           category: this.category,
           deadline: this.deadline,
         });
-      } else {
+      } else if (this.isEdit && this.userRole == "Employee") {
+        this.$emit("update-employee", {
+          task_id: this.taskId,
+          taken_time: this.taken_time,
+          status: this.status,
+        });
+      }
+      if (!this.isEdit) {
         this.$emit("create", {
           employee: this.employee,
           title: this.title,

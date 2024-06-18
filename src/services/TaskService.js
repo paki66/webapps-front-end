@@ -46,6 +46,20 @@ async function postTask(taskData) {
   }
 }
 
+async function patchTaskEmployee(taskData) {
+  try {
+    const response = await tasksService.patch("/employeeEdit", taskData, {
+      headers: {
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("user")).token,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function deleteTask(id) {
   try {
     const response = await tasksService.delete("/?id=" + id, {
@@ -82,4 +96,5 @@ export default {
   postTask,
   deleteTask,
   getTasksForReport,
+  patchTaskEmployee,
 };

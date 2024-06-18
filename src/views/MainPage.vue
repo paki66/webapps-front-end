@@ -31,7 +31,7 @@
   <v-row>
     <v-col cols="1"> </v-col>
 
-    <v-col cols="2">
+    <v-col cols="2" v-if="userRole !== 'Employee'">
       <main-button @click="showNewProjectPopUp = true" size="large" block>
         New project
         <v-icon icon="mdi-plus"> </v-icon>
@@ -64,7 +64,7 @@
         @filter="onFilter"
       ></FilterPopUp>
     </v-col>
-    <v-col cols="2">
+    <v-col cols="2" v-if="userRole !== 'Employee'">
       <v-btn size="large" block="" @click="showHistoryPopUp = true">
         <v-icon icon="mdi-clock" color="black"> </v-icon>
         Report
@@ -149,10 +149,12 @@
                   :buttonText="editText"
                   :isEdit="true"
                   :taskId="task._id"
+                  :userRole="userRole"
                   @close="showTaskDialog = false"
                   @update="updateTask"
+                  @update-employee="updateTaskEmployee"
                 ></TaskDialog
-                ><v-col cols="1">
+                ><v-col cols="1" v-if="userRole !== 'Employee'">
                   <v-btn
                     :loading="loading"
                     block
@@ -204,7 +206,7 @@
 
   <v-row>
     <v-col cols="1"></v-col>
-    <v-col cols="1">
+    <v-col cols="1" v-if="userRole !== 'Employee'">
       <TaskDialog
         v-if="(showTaskDialog = true)"
         :buttonText="addText"
@@ -220,7 +222,6 @@
 import MainButton from "@/components/MainButton.vue";
 import NewProjectPopUp from "@/components/NewProjectPopUp.vue";
 import HistoryPopUp from "../components/HistoryPopUp.vue";
-import data from "@/data";
 import EmployeeStatus from "@/components/EmployeeStatus.vue";
 import FilterPopUp from "@/components/FilterPopUp.vue";
 import AuthService from "@/services/AuthService";
@@ -242,10 +243,10 @@ export default {
   name: "MainPage",
   data() {
     return {
-      data,
       popupDialog: false,
       dialog: false,
       select: null,
+      userRole: null,
       allProjects: [], //za dropdown
       showNewProjectPopUp: false,
       showPersonStatus: false,
@@ -262,8 +263,6 @@ export default {
       keyword: null,
 
       showTaskDialog: false,
-      editTitle: "Edit task",
-      addTitle: "Add new task",
       addText: "Add task",
       editText: "EDIT",
     };
@@ -273,9 +272,9 @@ export default {
       const userId = AuthService.getUser()._id;
       let response = await ProfileService.getUserInfo(userId);
       let results = response.data;
-      const userRole = results.role;
+      this.userRole = results.role;
 
-      if (userRole == "Manager") {
+      if (this.userRole == "Manager") {
         const response = await ProjectService.getManagerProjects(userId);
         this.allProjects = response.data;
         if (this.allProjects) {
@@ -283,7 +282,7 @@ export default {
         }
       }
 
-      if (userRole == "Employee") {
+      if (this.userRole == "Employee") {
         const response = await ProjectService.getEmployeeProjects(userId);
         this.allProjects = response.data;
         if (this.allProjects) {
@@ -414,6 +413,7 @@ export default {
       const year = task.deadline.getUTCFullYear();
 
       const formattedDate = `${month.toString().padStart(2, "0")}-${year}`;
+      console.log(formattedDate);
 
       const formattedDeadline = task.deadline
         ? new Date(
@@ -432,6 +432,17 @@ export default {
         status: task.status,
         category: task.category,
         deadline: formattedDeadline,
+      });
+      location.reload();
+    },
+
+    async updateTaskEmployee(task) {
+      let taskId = task.task_id;
+
+      const response = await TaskService.patchTaskEmployee({
+        taskId: taskId,
+        taken_time: task.taken_time,
+        status: task.status,
       });
       location.reload();
     },
